@@ -43,7 +43,8 @@ int checarInterseção(Segmento* a, Segmento* b){
         return 0;
     }    
     return 1;
-
+    
+    //O(1)
 
 };
 
@@ -65,12 +66,15 @@ int conectados(Lista* l){
 
     while(j != l->primeiro){
         //printf("Flag 3\n");
+        //O(n)
 
         if(l->tamanho - vertices->tamanho <= max){
             break;
         }
 
         while(i != l->primeiro){
+            
+            //O(n)
 
             //printf("Flag 4, conecta: %d\n", conecta);
 
@@ -135,4 +139,6 @@ int conectados(Lista* l){
         deletaLista(vertices);
 
     return max;
+    
+    // O(n) * O(n) = O(n²)
 }
