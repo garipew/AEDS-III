@@ -50,7 +50,10 @@ int checarInterseção(Segmento* a, Segmento* b){
 int conectados(Lista* l){
 
     int conecta = 0;
-    Item* aux = l->ultimo;
+    int max = 0;
+    Item* i = l->ultimo;
+    Item* j = l->ultimo;
+    Lista* vertices = criaListaVazia(criaItem(0, 0), criaItem(0, 0));
     Segmento* aux1 = NULL;
     Segmento* aux2 = NULL;
     Segmento* antXa = NULL;
@@ -58,47 +61,78 @@ int conectados(Lista* l){
     Segmento* atualXa;
     Segmento* atualXb;
 
-    while(aux != l->primeiro){
+    //printf("Flag 2\n");
 
+    while(j != l->primeiro){
+        //printf("Flag 3\n");
 
-        atualXa = criarSegmento(l->ancoras[0], aux);
-        atualXb = criarSegmento(l->ancoras[1], aux);
-
-        aux = aux->anterior;
-
-        if(checarInterseção(atualXa, antXb) || checarInterseção(atualXb, antXa)){
-            
-            aux1 = atualXa;
-            aux2 = atualXb;
-            atualXa = NULL;
-            atualXb = NULL;
-
-            free(aux1);
-            free(aux2);
-            
-        } 
-        else{
-            conecta++;
-
-            aux1 = antXa;
-            aux2 = antXb;
-
-            antXa = atualXa;
-            antXb = atualXb;
-
-            free(aux1);
-            free(aux2);
+        if(l->tamanho - vertices->tamanho <= max){
+            break;
         }
-        
 
+        while(i != l->primeiro){
+
+            //printf("Flag 4, conecta: %d\n", conecta);
+
+
+            if(buscarElemento(vertices, i->id)){
+                //printf("break interno\n");
+                break;
+            }
+
+
+            atualXa = criarSegmento(l->ancoras[0], i);
+            atualXb = criarSegmento(l->ancoras[1], i);
+
+            i = i->anterior;
+
+            if(checarInterseção(atualXa, antXb) || checarInterseção(atualXb, antXa)){
+                
+                aux1 = atualXa;
+                aux2 = atualXb;
+                atualXa = NULL;
+                atualXb = NULL;
+
+                free(aux1);
+                free(aux2);
+                
+            } 
+            else{
+                //printf("Conecta (%d, %d)\n", atualXa->pontoF->coord[0], atualXa->pontoF->coord[1]);
+                conecta++;
+
+                aux1 = antXa;
+                aux2 = antXb;
+
+                antXa = atualXa;
+                antXb = atualXb;
+
+                inserir(vertices, atualXa->pontoF);
+
+                free(aux1);
+                free(aux2);
+            }
+
+        }
+    
+        if(conecta >= max){
+            max = conecta;
+        }
+        conecta = 0;
+        j = j->anterior;
+        i = j;
     }
 
-    free(atualXa);
-    free(atualXb);
-    if(antXa!=atualXa){
-        free(antXa);
-        free(antXb);
-    }
+        free(atualXa);
+        free(atualXb);
+        if(antXa!=atualXa){
+            free(antXa);
+            free(antXb);
+        }
+        //imprimeLista(l);
+        //printf("===========\n");
+        //imprimeLista(vertices);
+        deletaLista(vertices);
 
-    return conecta;
+    return max;
 }

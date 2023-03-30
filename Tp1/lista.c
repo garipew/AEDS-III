@@ -27,6 +27,7 @@ Item* criaOrigem(){
         Item* o = (Item*) malloc(sizeof(Item));
         o->coord[0] = 0;
         o->coord[1] = 0;
+        o->id = -1;
 
         return o;
 
@@ -44,6 +45,7 @@ Item* criaItem(int x, int y){
 
         c->coord[0] = x;
         c->coord[1] = y;
+        c->id = 0;
 
         return c;
 
@@ -94,6 +96,9 @@ void inserir(Lista* l, Item* i){
         l->ultimo->proximo = i;
         l->ultimo = i;
         l->tamanho++;
+        if(i->id == 0){
+                i->id = l->tamanho;
+        }
 
         insertionSort(l);
 
@@ -262,21 +267,21 @@ void imprimeLista(Lista* l){
         // F(n) = O(n)
 }
 
-Item* buscarElemento(Lista* l, int* coord){
+int buscarElemento(Lista* l, int id){
         if(listaVazia(l))
-                return NULL;
+                return 0;
 
         Item* atual = l->primeiro->proximo;
 
         // f(n) = n + 1 + g(n)
         // f(n) = 2n + 1 = O(n)
         while(atual!=NULL){
-                if(coord == atual->coord) // g(n) = n
-                        return atual;
+                if(id == atual->id) // g(n) = n
+                        return 1;
                 atual = atual->proximo;
         }
 
-        return NULL;
+        return 0;
 
         // F(n) = O(n)
 }

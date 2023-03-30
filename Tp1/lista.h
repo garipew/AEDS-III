@@ -2,6 +2,7 @@
 typedef struct item{
 
                 int coord[2];
+                int id;
 
                 struct item *proximo;
 
@@ -27,5 +28,5 @@ void troca(Lista*, Item*, Item*);
 int listaVazia(Lista*);
 int* removeElemento(Lista*, int*);
 void imprimeLista(Lista*);
-Item* buscarElemento(Lista*, int*);
+int buscarElemento(Lista*, int);
 void deletaLista(Lista*);
