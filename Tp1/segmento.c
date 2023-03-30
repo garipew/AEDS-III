@@ -66,7 +66,7 @@ int conectados(Lista* l){
 
     while(j != l->primeiro){
         //printf("Flag 3\n");
-        //O(n)
+        // somatorio(i=0->n-1) de n 
 
         if(l->tamanho - vertices->tamanho <= max){
             break;
