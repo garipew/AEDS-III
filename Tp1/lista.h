@@ -30,3 +30,4 @@ void removeElemento(Lista*, int);
 void imprimeLista(Lista*);
 int buscarElemento(Lista*, int);
 void deletaLista(Lista*);
+Item* clonarItem(Item*);

@@ -101,8 +101,7 @@ int conectados(Lista* l){
                 antXa = atualXa;
                 antXb = atualXb;
 
-                inserir(vertices, criaItem(atualXa->pontoF->coord[0], atualXa->pontoF->coord[1], 
-                atualXa->pontoF->id));
+                inserir(vertices, clonarItem(atualXa->pontoF));
 
                 free(aux1);
                 free(aux2);

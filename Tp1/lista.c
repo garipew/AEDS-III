@@ -291,3 +291,11 @@ int buscarElemento(Lista* l, int id){
 
         // F(n) = O(n)
 }
+
+Item* clonarItem(Item* a){
+
+        Item* clone = criaItem(a->coord[0], a->coord[1], a->id);
+
+        return clone;
+
+}
