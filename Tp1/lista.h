@@ -21,12 +21,12 @@ typedef struct lista{
 }Lista;
 
 Lista* criaListaVazia(Item*, Item*);
-Item* criaItem(int, int);
+Item* criaItem(int, int, int);
 Item* criaOrigem();
 void inserir(Lista*, Item*);
 void troca(Lista*, Item*, Item*);
 int listaVazia(Lista*);
-int* removeElemento(Lista*, int*);
+void removeElemento(Lista*, int);
 void imprimeLista(Lista*);
 int buscarElemento(Lista*, int);
 void deletaLista(Lista*);

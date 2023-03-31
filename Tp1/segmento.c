@@ -14,8 +14,8 @@ Segmento* criarSegmento(Item* pI, Item* pF){
 
 int checarInterseção(Segmento* a, Segmento* b){
 
-    // Seguindo a formula temos que caso [ (bXFinal - bXInicial) * (aYFinal - aYInicial) - 
-    //                          (bYFinal - bYInicial) * (aXFinal - aXInicial) = 0 ] não há interseção.
+    // A seguinte função tem como objetivo calcular a intersecção entre dois segmentos
+    // baseando-se em seus respectivos pontos iniciais e finais.
 
     if(a == NULL || b == NULL){
         return 0;
@@ -54,7 +54,7 @@ int conectados(Lista* l){
     int max = 0;
     Item* i = l->ultimo;
     Item* j = l->ultimo;
-    Lista* vertices = criaListaVazia(criaItem(0, 0), criaItem(0, 0));
+    Lista* vertices = criaListaVazia(criaItem(0, 0, 0), criaItem(0, 0, 0));
     Segmento* aux1 = NULL;
     Segmento* aux2 = NULL;
     Segmento* antXa = NULL;
@@ -62,25 +62,15 @@ int conectados(Lista* l){
     Segmento* atualXa;
     Segmento* atualXb;
 
-    //printf("Flag 2\n");
-
     while(j != l->primeiro){
-        //printf("Flag 3\n");
-        // somatorio(i=0->n-1) de n 
 
         if(l->tamanho - vertices->tamanho <= max){
             break;
         }
 
         while(i != l->primeiro){
-            
-            //O(n)
-
-            //printf("Flag 4, conecta: %d\n", conecta);
-
 
             if(buscarElemento(vertices, i->id)){
-                //printf("break interno\n");
                 break;
             }
 
@@ -102,7 +92,7 @@ int conectados(Lista* l){
                 
             } 
             else{
-                //printf("Conecta (%d, %d)\n", atualXa->pontoF->coord[0], atualXa->pontoF->coord[1]);
+            
                 conecta++;
 
                 aux1 = antXa;
@@ -111,13 +101,16 @@ int conectados(Lista* l){
                 antXa = atualXa;
                 antXb = atualXb;
 
-                inserir(vertices, atualXa->pontoF);
+                inserir(vertices, criaItem(atualXa->pontoF->coord[0], atualXa->pontoF->coord[1], 
+                atualXa->pontoF->id));
 
                 free(aux1);
                 free(aux2);
             }
 
         }
+
+        // somatorio(i=1->n) de i == (n²+n)/2 = O(n²)
     
         if(conecta >= max){
             max = conecta;
@@ -127,18 +120,15 @@ int conectados(Lista* l){
         i = j;
     }
 
-        free(atualXa);
-        free(atualXb);
-        if(antXa!=atualXa){
-            free(antXa);
-            free(antXb);
-        }
-        //imprimeLista(l);
-        //printf("===========\n");
-        //imprimeLista(vertices);
-        deletaLista(vertices);
+    free(atualXa);
+    free(atualXb);
+    if(antXa!=atualXa){
+        free(antXa);
+        free(antXb);
+    }
 
+    deletaLista(vertices);
     return max;
     
-    // O(n) * O(n) = O(n²)
+    // O(n²)
 }

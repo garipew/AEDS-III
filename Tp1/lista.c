@@ -35,7 +35,7 @@ Item* criaOrigem(){
 
 }
 
-Item* criaItem(int x, int y){
+Item* criaItem(int x, int y, int indice){
 
         Item* c = (Item*) malloc(sizeof(Item));
 
@@ -45,7 +45,7 @@ Item* criaItem(int x, int y){
 
         c->coord[0] = x;
         c->coord[1] = y;
-        c->id = 0;
+        c->id = indice;
 
         return c;
 
@@ -174,7 +174,7 @@ void troca(Lista* l, Item* i, Item* j){
 
 int listaVazia(Lista* l){
 
-        if(l->primeiro == l->ultimo)
+        if(l->tamanho == 0)
                 return 1;
         return 0;
 
@@ -182,38 +182,42 @@ int listaVazia(Lista* l){
 
 }
 
-int compararPontos(Item *p, int a[2]){
+int compararPontos(Item *p, int a){
 
-        if(a[0] == p->coord[0] && a[1] == p->coord[1])
+        if(a == p->id)
                 return 1;
         return 0;
 
 }
 
-int* removeElemento(Lista* l, int* coord){
+void removeElemento(Lista* l, int ident){
         if(listaVazia(l))
-                return 0;
+                return;
 
-        int* c;
+        //int* c;
         Item* atual = l->primeiro;
         Item* aux;
 
         // f(n) = 3n + 1 = O(n)
         while(atual->proximo != NULL){
-                if(compararPontos(atual->proximo, coord)){
+
+                if(compararPontos(atual->proximo, ident)){
                         aux = atual->proximo;
                         atual->proximo = atual->proximo->proximo;
-                        if(aux->proximo == NULL)
+                        if(aux->proximo == NULL){
                                 l->ultimo = atual;
+                        }
                         l->tamanho--;
+                        if(l->tamanho == 0){
+                                l->ultimo = l->primeiro;
+                        }
 
-
-                        c = aux->coord;
-                        free(aux);
-
-                        return c;
+                        //c = aux->coord;
+                        if(aux!=NULL)
+                                free(aux);
+                        return;
                 }
-        atual = atual->proximo;
+                atual = atual->proximo;
 
         }
 
@@ -222,6 +226,8 @@ int* removeElemento(Lista* l, int* coord){
 }
 
 void deletaLista(Lista* l){
+
+
 
         int tamanho = l->tamanho;
 
@@ -232,7 +238,7 @@ void deletaLista(Lista* l){
         free(l->ancoras[1]);
         
         for(int i = 0; i<tamanho; i++){
-                removeElemento(l, l->ultimo->coord); // g(n) = O(n) * n = O(n²)
+                removeElemento(l, l->ultimo->id); // g(n) = O(n) * n = O(n²)
         }
 
         Item* origem = l->primeiro;

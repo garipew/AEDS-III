@@ -15,20 +15,19 @@ void main(){
 
     scanf("%d %d %d", &N, &Xa, &Xb);
 
-    l = criaListaVazia(criaItem(Xa, 0), criaItem(Xb, 0));
+    l = criaListaVazia(criaItem(Xa, 0, 0), criaItem(Xb, 0, 0));
 
     for(int i = 0; i < N; i++){
         scanf("%d %d", &x, &y);
-        inserir(l, criaItem(x, y));
+        inserir(l, criaItem(x, y, 0));
     }
+
 
     printf("%d\n", conectados(l));
 
     deletaLista(l);
 
     gettimeofday(&tf, NULL);
-
-    //printf("Tempo: %ld micro-segundos\n", (tf.tv_usec - t1.tv_usec));
 
     return;
 
