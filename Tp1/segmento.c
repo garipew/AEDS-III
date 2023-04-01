@@ -54,7 +54,7 @@ int conectados(Lista* l){
     int max = 0;
     Item* i = l->ultimo;
     Item* j = l->ultimo;
-    Lista* vertices = criaListaVazia(criaItem(0, 0, 0), criaItem(0, 0, 0));
+    Lista* vertices = criaListaVazia(criaItem(0, 0), criaItem(0, 0));
     Segmento* aux1 = NULL;
     Segmento* aux2 = NULL;
     Segmento* antXa = NULL;
