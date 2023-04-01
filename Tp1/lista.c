@@ -35,7 +35,7 @@ Item* criaOrigem(){
 
 }
 
-Item* criaItem(int x, int y, int indice){
+Item* criaItem(int x, int y){
 
         Item* c = (Item*) malloc(sizeof(Item));
 
@@ -45,7 +45,7 @@ Item* criaItem(int x, int y, int indice){
 
         c->coord[0] = x;
         c->coord[1] = y;
-        c->id = indice;
+        c->id = 0;
 
         return c;
 
@@ -294,7 +294,8 @@ int buscarElemento(Lista* l, int id){
 
 Item* clonarItem(Item* a){
 
-        Item* clone = criaItem(a->coord[0], a->coord[1], a->id);
+        Item* clone = criaItem(a->coord[0], a->coord[1]);
+	clone->id = a->id;
 
         return clone;
 
