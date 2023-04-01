@@ -21,7 +21,7 @@ typedef struct lista{
 }Lista;
 
 Lista* criaListaVazia(Item*, Item*);
-Item* criaItem(int, int, int);
+Item* criaItem(int, int);
 Item* criaOrigem();
 void inserir(Lista*, Item*);
 void troca(Lista*, Item*, Item*);
