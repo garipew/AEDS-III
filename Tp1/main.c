@@ -15,7 +15,7 @@ void main(){
 
     scanf("%d %d %d", &N, &Xa, &Xb);
 
-    l = criaListaVazia(criaItem(Xa, 0, 0), criaItem(Xb, 0, 0));
+    l = criaListaVazia(criaItem(Xa, 0), criaItem(Xb, 0));
 
     for(int i = 0; i < N; i++){
         scanf("%d %d", &x, &y);
