@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-void main(){
+
+void main(int argc, char **argv){
 
     struct timeval t1, tf;
 
