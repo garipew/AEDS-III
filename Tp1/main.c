@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <getopt.h>
+#include <string.h>
 
 
 void main(int argc, char **argv){
@@ -9,18 +11,35 @@ void main(int argc, char **argv){
     struct timeval t1, tf;
     FILE *input;
     FILE *output;
+    int opt;
+    char inp[200];
+    char out[200];
 
     gettimeofday(&t1, NULL);
+
+    while((opt = getopt(argc, argv, "i:o:")) != -1){
+        switch(opt){
+            case 'i':
+                strcpy(inp, optarg);
+                break;
+            case 'o':
+                strcpy(out, optarg);
+                break;
+            default:
+                printf("Opção inválida.\n");
+                exit(-1);
+        }
+    }
     
     Lista* l;
 
     int N, Xa, Xb, x, y;
 
-    input = fopen("input", "r");
-    output = fopen("output", "w");
+    input = fopen(inp, "r");
+    output = fopen(out, "w");
 
     if(input == NULL || output == NULL){
-        printf("Erro! Arquivo não encontrado.\n");
+        printf("Arquivo não encontrado.\n");
         exit(-1);
     }
 
