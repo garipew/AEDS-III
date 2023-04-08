@@ -19,6 +19,11 @@ void main(int argc, char **argv){
     input = fopen("input", "r");
     output = fopen("output", "w");
 
+    if(input == NULL || output == NULL){
+        printf("Erro! Arquivo não encontrado.\n");
+        exit(-1);
+    }
+
     fscanf(input, "%d %d %d", &N, &Xa, &Xb);
 
     l = criaListaVazia(criaItem(Xa, 0), criaItem(Xb, 0));
