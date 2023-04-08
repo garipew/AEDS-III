@@ -5,8 +5,10 @@
 
 
 void main(int argc, char **argv){
-
+    
     struct timeval t1, tf;
+    FILE *input;
+    FILE *output;
 
     gettimeofday(&t1, NULL);
     
@@ -14,17 +16,22 @@ void main(int argc, char **argv){
 
     int N, Xa, Xb, x, y;
 
-    scanf("%d %d %d", &N, &Xa, &Xb);
+    input = fopen("input", "r");
+    output = fopen("output", "w");
+
+    fscanf(input, "%d %d %d", &N, &Xa, &Xb);
 
     l = criaListaVazia(criaItem(Xa, 0), criaItem(Xb, 0));
 
     for(int i = 0; i < N; i++){
-        scanf("%d %d", &x, &y);
+        fscanf(input, "%d %d", &x, &y);
         inserir(l, criaItem(x, y));
     }
 
+    fclose(input);
 
-    printf("%d\n", conectados(l));
+    fprintf(output, "%d\n", conectados(l));
+    fclose(output);
 
     deletaLista(l);
 
