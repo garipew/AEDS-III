@@ -12,7 +12,7 @@ Segmento* criarSegmento(Item* pI, Item* pF){
 
 }
 
-int checarInterseção(Segmento* a, Segmento* b){
+int checarIntersecao(Segmento* a, Segmento* b){
 
     // A seguinte função tem como objetivo calcular a intersecção entre dois segmentos
     // baseando-se em seus respectivos pontos iniciais e finais.
@@ -80,7 +80,7 @@ int conectados(Lista* l){
 
             i = i->anterior;
 
-            if(checarInterseção(atualXa, antXb) || checarInterseção(atualXb, antXa)){
+            if(checarIntersecao(atualXa, antXb) || checarIntersecao(atualXb, antXa)){
                 
                 aux1 = atualXa;
                 aux2 = atualXb;

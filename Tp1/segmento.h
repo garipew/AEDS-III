@@ -8,5 +8,5 @@ typedef struct seg{
 } Segmento;
 
 Segmento* criarSegmento(Item*, Item*);
-int checarInterseção(Segmento*, Segmento*);
+int checarIntersecao(Segmento*, Segmento*);
 int conectados(Lista*);
