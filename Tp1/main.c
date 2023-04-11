@@ -9,16 +9,18 @@
 
 void main(int argc, char **argv){
     
+    /*
     struct timeval t1, tf;
 
-    struct rusage uso;
-    struct timeval inicio, fim;
 
     gettimeofday(&t1, NULL);
 
-    getrusage(RUSAGE_SELF, &uso);
-    inicio = uso.ru_utime;
-    
+    struct rusage inicio, fim;
+    getrusage(RUSAGE_SELF, &inicio);
+
+    float tCPU;
+    */
+
     FILE *input;
     FILE *output;
     int opt;
@@ -68,13 +70,17 @@ void main(int argc, char **argv){
 
     deletaLista(l);
 
+    /*
     gettimeofday(&tf, NULL);
-    printf("%ldms\n", (((tf.tv_sec*1000000) + tf.tv_usec) - ((t1.tv_sec*1000000) + t1.tv_usec)));
+    printf("%.06fs\n", ((tf.tv_sec-t1.tv_sec) + 1e-6*(float)(tf.tv_usec-t1.tv_usec)));
 
-    getrusage(RUSAGE_SELF, &uso);
-    fim = uso.ru_utime;
-    printf("CPU: %ldms\n", (((fim.tv_sec*100000)+fim.tv_usec) -((inicio.tv_sec*100000)+inicio.tv_usec)));
-    
+    getrusage(RUSAGE_SELF, &fim);
+
+ 
+    tCPU = (fim.ru_utime.tv_sec - inicio.ru_utime.tv_sec) + 1e-6*(fim.ru_utime.tv_usec - inicio.ru_utime.tv_usec);
+    printf("%.06fs\n", tCPU);
+    */
+ 
     return;
 
 }
