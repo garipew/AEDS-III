@@ -27,7 +27,6 @@ void inserir(Lista*, Item*);
 void troca(Lista*, Item*, Item*);
 int listaVazia(Lista*);
 void removeElemento(Lista*, int);
-void imprimeLista(Lista*);
 int buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 Item* clonarItem(Item*);
