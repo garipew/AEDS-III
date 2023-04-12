@@ -249,30 +249,6 @@ void deletaLista(Lista* l){
 
 }
 
-void imprimeLista(Lista* l){
-
-        if(listaVazia(l)){
-                printf("Lista Vazia!\n");
-                return;
-        }
-
-        /*
-        for(int i = 0; i < 2; i++){
-                printf(ANSI_COLOR_RED "(%d ;%d)\n", l->ancoras[i]->coord[0], l->ancoras[i]->coord[1]);
-        }
-        */
-
-
-        Item* atual = l->primeiro->proximo;
-        // f(n) = n + 1
-        while(atual!=NULL){
-                printf("(%d; %d)\n", atual->coord[0], atual->coord[1]);
-                atual = atual->proximo;
-        }
-
-        // F(n) = O(n)
-}
-
 int buscarElemento(Lista* l, int id){
         if(listaVazia(l))
                 return 0;
