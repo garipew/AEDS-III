@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "fibonacci.h"
 
-int Fibonacci(int a){
+long int non_recursiveF(int a){
 
     int f = 0;
     int f1 = 1;
@@ -23,13 +24,12 @@ int Fibonacci(int a){
 
 }
 
-int main(){
+int recursiveF(int a){
 
-    int f;
-
-    printf("Type a number: ");
-    scanf("%d", &f);
-
-    printf("Fibonacci number %d = %d\n", f, Fibonacci(f));
+    if(a==0)
+        return 0;
+    if(a==1)
+        return 1;
+    return recursiveF(a-1) + recursiveF(a-2);
 
 }
