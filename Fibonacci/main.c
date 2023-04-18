@@ -10,17 +10,20 @@ int main(int argc, char* argv[]){
 
     while((opt = getopt(argc, argv, "rn")) != -1){
         
-        printf("Type a number: ");
-        scanf("%d", &f);
+
         switch(opt){
             case 'r':
+                printf("Type a number: ");
+                scanf("%d", &f);
                 printf("Fibonacci number %d = %d\n", f, recursiveF(f));
                 break;
             case 'n':
+                printf("Type a number: ");
+                scanf("%d", &f);
                 printf("Fibonacci number %d = %ld\n", f, non_recursiveF(f));
                 break;
             default:
-                printf("Usage -r/-n");
+                printf("Usage -r/-n\n");
         }
 
     }
