@@ -1,18 +1,20 @@
+#include "lista.h"
 
-typedef struct aresta {
+typedef struct grafo{
 
-	Nodulo* origem;
-	Nodulo* destino;
+    Vertice* inicial;
+    int tamanho;
 
-} Aresta;
+} Grafo;
 
+typedef struct vertice{
 
-typedef struct nodulo {
+    Lista* arestas;
+    int id;
 
-} Nodulo;
+} Vertice;
 
-
-Nodulo* criarNodulo();
-void criarAresta(Nodulo*, Nodulo*);
-void removerNodulo(Nodulo*);
-void destruirGrafo(Nodulo*);
+Grafo* criaGrafo();
+Vertice* criaVertice();
+void insereVertice(Vertice*, Grafo*);
+void insereArestas(Lista*, Vertice*);
