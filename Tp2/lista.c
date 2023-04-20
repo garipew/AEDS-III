@@ -23,9 +23,9 @@ Lista* criaListaVazia(Item* ancoraA, Item* ancoraB){
 Item* criaOrigem(){
 
         Item* o = (Item*) malloc(sizeof(Item));
-        o->origem = -1;
+        
         o->destino = 0;
-        o->id = -1;
+        o->peso = -1;
 
         return o;
 
@@ -40,16 +40,14 @@ Item* criaItem(){
         c->proximo = NULL;
         c->anterior = NULL;
 
-        c->origem = 0;
         c->destino = 0;
-
-        c->id = 0;
+        c->peso = 0;
 
         return c;
 
 }
 
-void inserir(Lista* l, Item* i, int origem, int destino){
+void inserir(Lista* l, Item* i, int peso, int destino){
 
         if(listaVazia(l)){
                 l->primeiro->proximo = i;
@@ -60,9 +58,10 @@ void inserir(Lista* l, Item* i, int origem, int destino){
         l->ultimo->proximo = i;
         l->ultimo = i;
         l->tamanho++;
-        i->origem = origem;
+
+        i->peso = peso;
         i->destino = destino;
-        i->id = l->tamanho;
+
 
 
 }
@@ -198,7 +197,7 @@ void deletaLista(Lista* l){
         // f(n) = O(n²)
         
         for(int i = 0; i<tamanho; i++){
-                removeElemento(l, l->ultimo->id); // g(n) = O(n) * n = O(n²)
+                removeElemento(l, l->ultimo->destino); // g(n) = O(n) * n = O(n²)
         }
 
         Item* origem = l->primeiro;
@@ -209,7 +208,7 @@ void deletaLista(Lista* l){
 
 }
 
-int buscarElemento(Lista* l, int id){
+int buscarElemento(Lista* l, int destino){
         if(listaVazia(l))
                 return 0;
 
@@ -218,7 +217,7 @@ int buscarElemento(Lista* l, int id){
         // f(n) = n + 1 + g(n)
         // f(n) = 2n + 1 = O(n)
         while(atual!=NULL){
-                if(id == atual->id) // g(n) = n
+                if(destino == atual->destino) // g(n) = n
                         return 1;
                 atual = atual->proximo;
         }

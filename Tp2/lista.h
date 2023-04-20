@@ -1,10 +1,8 @@
 
 typedef struct item{
 
-    int origem;
     int destino;
     int peso;
-    int id;
 
     struct item *proximo;
 
