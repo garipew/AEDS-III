@@ -16,7 +16,7 @@ Vertice* verticeCabeca(){
 Grafo* criaGrafo(){
 
     Grafo* g = (Grafo*)malloc(sizeof(Grafo));
-    Item* origem = verticeCabeca(); 
+    Vertice* origem = verticeCabeca(); 
 
     g->primeiro = origem;
     g->ultimo = origem;

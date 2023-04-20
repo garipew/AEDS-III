@@ -7,16 +7,21 @@
 void main(int argc, char* argv[]){
 
     int sol;
-    char entrada[200];
+    FILE* e;
 
-    sol = atoi(argv[1]);
-    if(argv[2] == NULL){
-        printf("Arquivo não encontrado.\n");
+    if(argc < 3){
+        printf("Missing arguments <int> <filename>.\n");
         exit(-1);
     }
-    strcpy(entrada, argv[2]);
 
-    printf("solucao %d\nentrada: %s\n", sol, entrada);
+    sol = atoi(argv[1]);
+
+    e = fopen(argv[2], "r");
+    if(e == NULL){
+    printf("Falha ao ler o arquivo \"%s\".\n", argv[2]);
+    }
+
+    printf("solucao %d\nentrada: %s\n", sol, argv[2]);
 
 
 }
