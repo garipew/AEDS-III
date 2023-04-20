@@ -24,4 +24,4 @@ typedef struct grafo{
 Grafo* criaGrafo();
 Vertice* criaVertice();
 void insereVertice(Vertice*, Grafo*);
-void insereAresta(Vertice*, int, int, int);
+void insereAresta(Vertice*, int, int);
