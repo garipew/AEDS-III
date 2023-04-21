@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Lista* criaListaVazia(Item* ancoraA, Item* ancoraB){
+Lista* criaListaVazia(){
         Lista* l = (Lista*)malloc(sizeof(Lista));
         Item* origem = criaOrigem();
 
@@ -136,6 +136,9 @@ void troca(Lista* l, Item* i, Item* j){
 
 int listaVazia(Lista* l){
 
+        if(l == NULL)
+                return 1;
+
         if(l->tamanho == 0)
                 return 1;
         return 0;
@@ -146,7 +149,7 @@ int listaVazia(Lista* l){
 
 int compararPontos(Item *p, int a){
 
-        if(a == p->peso)
+        if(a == p->destino)
                 return 1;
         return 0;
 

@@ -25,3 +25,6 @@ Grafo* criaGrafo();
 Vertice* criaVertice();
 void insereVertice(Vertice*, Grafo*);
 void insereAresta(Vertice*, int, int);
+void percorrerVertice(Vertice*, Lista*);
+void removeVertice(int, Grafo*);
+void apagaGrafo(Grafo*);

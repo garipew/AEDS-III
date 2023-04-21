@@ -19,7 +19,7 @@ typedef struct lista{
 
 }Lista;
 
-Lista* criaListaVazia(Item*, Item*);
+Lista* criaListaVazia();
 Item* criaItem();
 Item* criaOrigem();
 void inserir(Lista*, Item*, int, int);
