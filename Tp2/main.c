@@ -1,4 +1,4 @@
-#include "arvore.h"
+#include "grafo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -9,18 +9,9 @@ void main(int argc, char* argv[]){
 
     int sol;
     FILE* e;
-    Arvore* teste = cria_arvore_vazia();
+    Grafo* g = criaGrafo();
 
-    teste->raiz = insere(cria_no(5), 1);
-    teste->raiz = insere(teste->raiz, 4);
-
-    pre_ordem(teste, teste->raiz);
-    printf("\n");
-    pos_ordem(teste, teste->raiz);
-    printf("\n");
-    ordem_central(teste, teste->raiz);
-    printf("\n");
-
+    apagaGrafo(g);
     /*
     if(argc < 3){
         printf("Missing arguments <int> <filename>.\n");
