@@ -60,9 +60,51 @@ void insereVertice(Vertice* v, Grafo* g){
 
 void insereAresta(Vertice* orig, int peso, int dest){
 
-    if(orig->arestas == NULL)
-        orig->arestas = criaListaVazia();
     inserir(orig->arestas, criaItem(), peso, dest);
+
+}
+
+void imprimeArestas(Vertice* v){
+
+    Lista* a = v->arestas;
+    Item* aux = a->primeiro->proximo;
+
+    while(aux != NULL){
+
+        printf("%d -> %d; ", v->id, aux->destino);
+        aux = aux->proximo;
+
+    }
+    printf("\n");
+
+}
+
+Vertice* caminharAresta(Vertice* origem, int destino){
+
+    Vertice* atual = origem;
+
+    while(atual!=NULL){
+        if(atual->id == destino)
+            return atual;
+        atual = atual->prox;
+    }
+    return NULL;
+
+}
+
+Vertice* percorrerAresta(Vertice* origem){
+
+    Vertice* atual = origem;
+    Lista* arestas = origem->arestas;
+
+    while(!listaVazia(atual->arestas)){
+        printf("%d -> ", atual->id);
+        atual = caminharAresta(origem, arestas->primeiro->proximo->destino);
+        arestas = atual->arestas;
+    }
+    printf("%d\n", atual->id);
+
+    return atual;
 
 }
 
@@ -77,9 +119,8 @@ void removeVertice(int destino, Grafo* g){
     while(atual->prox != NULL){
 
         if(atual->prox->id == destino){
-            if(!listaVazia(atual->prox->arestas)){
-                deletaLista(atual->prox->arestas);
-            }
+
+            deletaLista(atual->prox->arestas);
             aux = atual->prox;
             atual->prox = atual->prox->prox;
             
@@ -100,53 +141,6 @@ void removeVertice(int destino, Grafo* g){
 
 }
 
-/*
-Vertice* buscaVertice(int id, Vertice* raiz){
-
-    Vertice* v;
-
-    if(raiz->arestas->tamanho == 0){
-        return NULL;
-    }
-
-    v = raiz;
-    v->arestas = raiz->arestas;
-
-    while(v != NULL){
-        if(v->id = id)
-            return v;
-        v->arestas = v->prox->arestas;
-        v = v->prox;
-    }
-
-    return v;
-
-}
-
-void percorrerVertice(Vertice* raiz, Lista* l){
-
-    Item* atual;
-    Vertice* vAtual;
-
-    printf("%d %d->\n", raiz->id, listaVazia(l));
-    if(listaVazia(l)){
-        printf("lista vazia, voltando\n");
-        return;
-    }
-
-    atual = l->primeiro->proximo;
-    printf(" %d\n", atual->destino); 
-    if(atual->destino == vAtual->id){
-        return;
-    }   
-
-    while(atual != NULL){
-        vAtual = buscaVertice(atual->destino, raiz);
-        percorrerVertice(vAtual, vAtual->arestas);
-        atual = atual->proximo;
-    }
-}
-*/
 void apagaGrafo(Grafo* g){
 
     int t = g->tamanho;
