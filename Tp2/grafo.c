@@ -31,13 +31,14 @@ Grafo* criaGrafo(){
 }
 
 
-Vertice* criaVertice(){
+Vertice* criaVertice(int valor){
 
     Vertice* v = (Vertice*)malloc(sizeof(Vertice));
 
     v->prox = NULL;
     v->ant = NULL;
-    v->arestas = criaListaVazia();
+    v->valor = valor;
+    v->adjacentes = criaListaVazia();
 
     v->id = 0;
 
@@ -58,15 +59,53 @@ void insereVertice(Vertice* v, Grafo* g){
 
 }
 
-void insereAresta(Vertice* orig, int peso, int dest){
+Vertice* encontraVertice(Grafo* g, int id){
 
-    inserir(orig->arestas, criaItem(), peso, dest);
+    Vertice* origem = g->primeiro->prox;
+
+    while(origem != NULL){
+        if(origem->id == id){
+            break;
+        }
+        origem = origem->prox;
+    }
+
+    return origem;
+
+}
+
+void insereAresta(Grafo* g, int origem, int dest, int peso){
+
+    Vertice* orig = encontraVertice(g, origem);
+
+    if(orig!=NULL)
+        inserir(orig->adjacentes, criaItem(), peso, dest);
+
+}
+
+int existeAresta(int v1, int v2, Grafo* g){
+
+    Vertice* origem = encontraVertice(g, v1);
+
+    if(origem == NULL)
+        return 0;
+
+    return buscarElemento(origem->adjacentes, v2);
+    // Vertice* destino = g->primeiro->prox;
+
+}
+
+void retiraAresta(int v1, int v2, Grafo* g){
+
+    Vertice* origem = encontraVertice(g, v1);
+
+    removeElemento(origem->adjacentes, v2);
 
 }
 
 void imprimeArestas(Vertice* v){
 
-    Lista* a = v->arestas;
+    Lista* a = v->adjacentes;
     Item* aux = a->primeiro->proximo;
 
     while(aux != NULL){
@@ -95,12 +134,12 @@ Vertice* caminharAresta(Vertice* origem, int destino){
 Vertice* percorrerAresta(Vertice* origem){
 
     Vertice* atual = origem;
-    Lista* arestas = origem->arestas;
+    Lista* adjacentes = origem->adjacentes;
 
-    while(!listaVazia(atual->arestas)){
+    while(!listaVazia(atual->adjacentes)){
         printf("%d -> ", atual->id);
-        atual = caminharAresta(origem, arestas->primeiro->proximo->destino);
-        arestas = atual->arestas;
+        atual = caminharAresta(origem, adjacentes->primeiro->proximo->destino);
+        adjacentes = atual->adjacentes;
     }
     printf("%d\n", atual->id);
 
@@ -120,7 +159,7 @@ void removeVertice(int destino, Grafo* g){
 
         if(atual->prox->id == destino){
 
-            deletaLista(atual->prox->arestas);
+            deletaLista(atual->prox->adjacentes);
             aux = atual->prox;
             atual->prox = atual->prox->prox;
             

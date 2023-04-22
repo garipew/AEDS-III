@@ -3,8 +3,9 @@
 
 typedef struct vertice{
 
-    Lista* arestas;
+    Lista* adjacentes;
     int id;
+    int valor;
 
     struct vertice* ant;
     struct vertice* prox;
@@ -22,9 +23,10 @@ typedef struct grafo{
 
 
 Grafo* criaGrafo();
-Vertice* criaVertice();
+Vertice* criaVertice(int);
 void insereVertice(Vertice*, Grafo*);
-void insereAresta(Vertice*, int, int);
+void insereAresta(Grafo*, int, int, int);
+int existeAresta(int, int, Grafo*);
 void imprimeArestas(Vertice* v);
 Vertice* caminharAresta(Vertice*, int);
 Vertice* percorrerAresta(Vertice*);
