@@ -7,12 +7,12 @@
 
 void main(int argc, char* argv[]){
 
-    int sol;
+    int sol, R, C, testes, valor;
     FILE* e;
-    Grafo* g = criaGrafo();
+    Grafo* g;
 
     if(argc < 3){
-        printf("Missing arguments <int> <filename>.\n");
+        printf("Esperado argumentos <int> <filename>.\n");
         exit(-1);
     }
 
@@ -23,8 +23,28 @@ void main(int argc, char* argv[]){
     printf("Falha ao ler o arquivo \"%s\".\n", argv[2]);
     }
 
-    printf("solucao %d\nentrada: %s\n", sol, argv[2]);
+    //printf("solucao %d\nentrada: %s\n", sol, argv[2]);
 
-    apagaGrafo(g);
+    fscanf(e, "%d", &testes);
+    for(int i = 0; i < testes; i++){
+
+        fscanf(e, "%d %d", &R, &C);
+        g = criaGrafo();
+
+        for(int j = 0; j < R; j++){
+            
+            fscanf(e, "%d", &valor);
+            insereVertice(criaVertice(valor), g);
+            insereAresta(g, j+1, 1, j+2);
+
+        }
+
+        imprimeArestas(g->primeiro->prox->prox);
+
+        apagaGrafo(g);
+
+    }
+
+
     
 }
