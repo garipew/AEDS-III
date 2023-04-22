@@ -11,7 +11,6 @@ void main(int argc, char* argv[]){
     FILE* e;
     Grafo* g = criaGrafo();
 
-    /*
     if(argc < 3){
         printf("Missing arguments <int> <filename>.\n");
         exit(-1);
@@ -25,7 +24,6 @@ void main(int argc, char* argv[]){
     }
 
     printf("solucao %d\nentrada: %s\n", sol, argv[2]);
-    */
 
     apagaGrafo(g);
     
