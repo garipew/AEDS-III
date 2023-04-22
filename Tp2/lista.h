@@ -25,7 +25,7 @@ Item* criaOrigem();
 void inserir(Lista*, Item*, int, int);
 void troca(Lista*, Item*, Item*);
 int listaVazia(Lista*);
-void removeElemento(Lista*, int);
+void removeElemento(Lista*, int, int);
 int buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 Item* clonarItem(Item*);

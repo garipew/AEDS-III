@@ -47,7 +47,7 @@ Item* criaItem(){
 
 }
 
-void inserir(Lista* l, Item* i, int peso, int destino){
+void inserir(Lista* l, Item* i, int destino, int peso){
 
         if(listaVazia(l)){
                 l->primeiro->proximo = i;
@@ -147,15 +147,15 @@ int listaVazia(Lista* l){
 
 }
 
-int compararPontos(Item *p, int a){
+int compararPontos(Item *p, int destino, int peso){
 
-        if(a == p->destino)
+        if(destino == p->destino && peso == p->peso)
                 return 1;
         return 0;
 
 }
 
-void removeElemento(Lista* l, int ident){
+void removeElemento(Lista* l, int ident, int peso){
         if(listaVazia(l))
                 return;
 
@@ -166,7 +166,7 @@ void removeElemento(Lista* l, int ident){
         // f(n) = 3n + 1 = O(n)
         while(atual->proximo != NULL){
 
-                if(compararPontos(atual->proximo, ident)){
+                if(compararPontos(atual->proximo, ident, peso)){
                         aux = atual->proximo;
                         atual->proximo = atual->proximo->proximo;
                         if(aux->proximo == NULL){
@@ -200,7 +200,7 @@ void deletaLista(Lista* l){
         // f(n) = O(n²)
         
         for(int i = 0; i<tamanho; i++){
-                removeElemento(l, l->ultimo->destino); // g(n) = O(n) * n = O(n²)
+                removeElemento(l, l->ultimo->destino, l->ultimo->peso); // g(n) = O(n) * n = O(n²)
         }
 
         Item* origem = l->primeiro;
