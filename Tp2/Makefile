@@ -1,11 +1,11 @@
-tp2: lista.o grafo.o main.o
-	gcc lista.o grafo.o main.o -o tp2
+tp2: lista.o grafoV2.o main.o
+	gcc lista.o grafoV2.o main.o -o tp2
 
 lista.o: lista.h lista.c
 	gcc -c lista.c
 
-grafo.o: grafo.h grafo.c
-	gcc -c grafo.c
+grafoV2.o: grafoV2.h grafoV2.c
+	gcc -c grafoV2.c
 
 main.o: main.c
 	gcc -c main.c
