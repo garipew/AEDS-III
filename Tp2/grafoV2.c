@@ -2,18 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Grafo* criaGrafo(){
-
-	Grafo* g = (Grafo*)malloc(sizeof(Grafo));
-	Vertice* origem = criaVertice(0);
-	g->tamanho = 0;
-
-	g->primeiro = origem;
-	g->ultimo = origem;
-	
-	return g;
-
-}
 
 Vertice* criaVertice(int valor){
 
@@ -27,6 +15,20 @@ Vertice* criaVertice(int valor){
 
 }
 
+Grafo* criaGrafo(){
+
+	Grafo* g = (Grafo*)malloc(sizeof(Grafo));
+	Vertice* origem = criaVertice(0);
+	g->tamanho = 0;
+
+	g->primeiro = origem;
+	g->ultimo = origem;
+	
+	return g;
+
+}
+
+
 void insereVertice(Grafo* g, int valor){
 	
 	Vertice* v = criaVertice(valor);
@@ -34,13 +36,13 @@ void insereVertice(Grafo* g, int valor){
 	if(g->tamanho == 0)
 		g->primeiro->prox = v;
 
-	g->tamanho++;
-	v->id = g->tamanho;
 
 	g->ultimo->prox = v;
 	v->ant = g->ultimo;
 	g->ultimo = v;
 
+	g->tamanho++;
+	v->id = g->tamanho;
 
 
 }
@@ -54,6 +56,7 @@ Vertice* encontraVertice(Grafo* g, int v){
 		if(v1->id == v)
 			return v1;
 		v1 = v1->prox;
+		
 
 	}
 
@@ -64,9 +67,11 @@ Vertice* encontraVertice(Grafo* g, int v){
 void insereAresta(Grafo* g, int v1, int v2, int peso){
 
 	Vertice* origem = encontraVertice(g, v1);
-
 	if(origem == NULL)
 		return;
+	if(origem->adjacentes == NULL)
+		origem->adjacentes = criaListaVazia();
+	
 	inserir(origem->adjacentes, criaItem(), v2, peso);
 
 }
@@ -106,15 +111,26 @@ void removeAresta(Grafo* g, int v1, int v2, int peso){
 
 void apagaGrafo(Grafo* g){
 
-	Vertice* atual = g->primeiro->prox;
+	Vertice* atual = g->primeiro;
 	Vertice* aux;
 
-	while(atual != NULL){
+	while(atual->prox != NULL){
+		
+		aux = atual->prox;
+		if(aux->adjacentes != NULL)
+			deletaLista(aux->adjacentes);
 
-		deletaLista(atual->adjacentes);
-		aux = atual;
+		atual->prox = atual->prox->prox;
+		if(aux->prox == NULL)
+			g->ultimo = atual;
+
+		g->tamanho--;
+		if(g->tamanho == 0)
+			g->ultimo = g->primeiro;
+		if(aux != NULL)
+			free(aux);
+
 		atual = atual->prox;
-		free(aux);
 
 	}
 
@@ -128,7 +144,9 @@ void desenhaGrafo(Grafo* g){
 
 	while(atual != NULL){
 
-		printf("%d : %d\n", atual->id, atual->valor);
+		printf("v%d = %d\n", atual->id, atual->valor);
+		if(atual->adjacentes != NULL)
+			imprimeLista(atual->adjacentes);
 		atual = atual->prox;
 
 	}
@@ -141,3 +159,31 @@ Grafo* transposto(Grafo* g){
 
 }
 
+
+void coletaDados(Grafo* g, int R, int C, FILE* e){
+
+/*
+	insere todos os valores da grid no grafo,
+	incluindo as arestas dos possiveis caminhos a serem percorridos.
+*/	
+
+	int contador = 0;
+	int valor;
+
+	while(contador < R*C){
+
+            if(fscanf(e, "%d", &valor) == 1){
+
+                insereVertice(g, valor);
+                contador++;
+        
+                if(contador%C != 0)
+                    insereAresta(g, contador, contador+1, 1);
+                if(contador <= C)
+                    insereAresta(g, contador, contador+C, 1);
+
+            }
+            
+        }
+
+}

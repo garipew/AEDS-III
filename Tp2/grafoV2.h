@@ -1,5 +1,5 @@
 #include "lista.h"
-
+#include <stdio.h>
 
 typedef struct vertice{
 
@@ -32,3 +32,4 @@ void apagaGrafo(Grafo*);
 void desenhaGrafo(Grafo*);
 Grafo* transposto(Grafo*);
 int obtemMin(Grafo*);
+void coletaDados(Grafo*, int, int, FILE*);
