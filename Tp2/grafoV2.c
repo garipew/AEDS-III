@@ -179,11 +179,64 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
         
                 if(contador%C != 0)
                     insereAresta(g, contador, contador+1, 1);
-                if(contador <= C)
+                if(contador <= ((R*C)-C))
                     insereAresta(g, contador, contador+C, 1);
 
             }
             
         }
+
+}
+
+void solucao1(Grafo* g, FILE* s){
+
+	int hpAtual = 0;
+	int hpTotal = 0;
+	Vertice* atual = g->primeiro->prox;
+
+	Item* adj;
+	Vertice* aux;
+	Vertice* aux2;
+
+	while(atual != g->ultimo){
+
+		adj = atual->adjacentes->primeiro->proximo;
+		aux = encontraVertice(g, adj->destino);
+
+
+		if(atual->adjacentes->tamanho == 2){
+
+			aux2 = encontraVertice(g, adj->proximo->destino);
+			atual = (aux->valor >= aux2->valor ? aux : aux2);
+
+		}else{
+			atual = aux;
+		}
+
+		hpAtual += atual->valor;
+
+		if(hpAtual+hpTotal <= 0){
+			hpTotal = ((-1*hpAtual)+1);	
+		}else if(hpTotal > atual->valor && atual->valor > 0){
+			hpTotal-= atual->valor;
+		}
+
+		aux = NULL;
+		aux2 = NULL;
+	
+	}
+
+	if(hpTotal == 0)
+		hpTotal++;
+	
+	fprintf(s, "%d\n", hpTotal);
+
+}
+
+void solucao(Grafo* g, int solucao, FILE* s){
+
+	if(solucao == 1)
+		solucao1(g, s);
+
 
 }

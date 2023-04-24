@@ -33,3 +33,6 @@ void desenhaGrafo(Grafo*);
 Grafo* transposto(Grafo*);
 int obtemMin(Grafo*);
 void coletaDados(Grafo*, int, int, FILE*);
+void solucao1(Grafo*, FILE*);
+void solucao2(Grafo*, FILE*);
+void solucao(Grafo*, int, FILE*);

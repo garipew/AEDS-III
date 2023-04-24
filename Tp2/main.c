@@ -9,8 +9,8 @@ void main(int argc, char* argv[]){
 
     int sol, R, C, testes;
     FILE* e;
+    FILE* s;
     Grafo* g;
-    char linha[200];
 
     if(argc < 3){
         printf("Esperado argumentos <int> <arquivo.txt>.\n");
@@ -20,6 +20,7 @@ void main(int argc, char* argv[]){
     sol = atoi(argv[1]);
 
     e = fopen(argv[2], "r");
+    s = fopen("saida.txt", "w");
 
     if(e == NULL){
     printf("Falha ao ler o arquivo \"%s\".\n", argv[2]);
@@ -30,19 +31,15 @@ void main(int argc, char* argv[]){
         
         g = criaGrafo();
 
-        printf("caso teste %d\n", i+1);
         fscanf(e, "%d %d", &R, &C);
-
-        printf("Ler %d x %d números.\n", R, C);
-        fgetc(e);
         
         coletaDados(g, R, C, e);
+        solucao(g, sol, s);
 
-        desenhaGrafo(g);
         apagaGrafo(g);
-        printf("\n\n");
     }
 
-
+    fclose(e);
+    fclose(s);
     
 }
