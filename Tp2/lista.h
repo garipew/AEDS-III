@@ -28,4 +28,4 @@ int listaVazia(Lista*);
 void removeElemento(Lista*, int, int);
 int buscarElemento(Lista*, int);
 void deletaLista(Lista*);
-Item* clonarItem(Item*);
+void imprimeLista(Lista*);

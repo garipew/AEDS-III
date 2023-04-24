@@ -193,7 +193,6 @@ void removeElemento(Lista* l, int ident, int peso){
 void deletaLista(Lista* l){
 
 
-
         int tamanho = l->tamanho;
 
         // f(n) = n + 1 + g(n)
@@ -228,4 +227,24 @@ int buscarElemento(Lista* l, int destino){
         return 0;
 
         // F(n) = O(n)
+}
+
+void imprimeLista(Lista* l){
+
+	if(listaVazia(l)){
+		return;
+	}
+
+	Item* atual = l->primeiro->proximo;
+	while(atual!=NULL){
+		if(atual->proximo!=NULL){
+			printf("v%d, ", atual->destino);
+			atual = atual->proximo;
+		}
+		else{
+			printf("v%d", atual->destino);
+			atual = atual->proximo;
+		}
+	}
+	printf("\n");
 }
