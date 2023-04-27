@@ -226,7 +226,6 @@ int solucao1(Grafo* g){
 	if(hpTotal == 0)
 		hpTotal++;
 	
-	//fprintf(s, "%d\n", hpTotal);
 	return hpTotal;
 
 }
@@ -240,43 +239,6 @@ void atualizaPeso(Grafo* g){
 int solucao2(Grafo* g){
 
 	//dijkstra
-
-	Vertice* atual = g->primeiro->prox;
-	atual->peso = 0;
-	Lista* adj;
-	Item* itemAux;
-	Vertice* aux;
-	Vertice* prox;
-
-	while(atual != g->ultimo){
-
-		adj = atual->adjacentes;
-		itemAux = adj->primeiro->proximo;
-
-		prox = encontraVertice(g, itemAux->destino);
-
-		while(itemAux != NULL){
-			
-			aux = encontraVertice(g, itemAux->destino);
-
-
-			if(aux->peso > itemAux->peso + atual->peso){
-				
-				aux->peso = itemAux->peso + atual->peso;
-				aux->antecessor = atual;
-
-			}
-
-			itemAux = itemAux->proximo;
-
-
-		}
-
-		atual = (prox->peso <= aux->peso ? prox : aux);
-
-	}
-	
-	return g->ultimo->peso;
 
 }
 
