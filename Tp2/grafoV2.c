@@ -165,8 +165,8 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
 
 	int contador = 0;
 	int valor;
-    int peso;
-    // esse peso é foreshadowing
+        int peso;
+        // esse peso é foreshadowing
 
 	while(contador < R*C){
 
@@ -174,9 +174,7 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
 
             insereVertice(g, valor);
             peso = valor * -1;
-            if(peso == 0){
-                peso--;
-            } 
+            
             contador++;
 
             if(contador%C != 0)
