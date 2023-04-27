@@ -165,18 +165,26 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
 
 	int contador = 0;
 	int valor;
+ int peso;
+ // esse peso é foreshadowing
 
 	while(contador < R*C){
 
         if(fscanf(e, "%d", &valor) == 1){
 
             insereVertice(g, valor);
+            peso = valor * -1;
+            if(peso < 0){
+                peso--;
+            } else { 
+                peso++;
+            }
             contador++;
 
             if(contador%C != 0)
-                insereAresta(g, contador, contador+1, 0);
+                insereAresta(g, contador, contador+1, peso);
             if(contador <= ((R*C)-C))
-	            insereAresta(g, contador, contador+C, 0);
+	            insereAresta(g, contador, contador+C, peso);
 
 
 		}
