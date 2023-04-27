@@ -10,6 +10,8 @@ Vertice* criaVertice(int valor){
 	v->id = 0;
 	v->adjacentes = NULL;
 	v->valor = valor;
+	v->peso = 1000000000;
+	v->antecessor = NULL;
 
 	return v;
 
@@ -153,12 +155,6 @@ void desenhaGrafo(Grafo* g){
 
 }
 
-Grafo* transposto(Grafo* g){
-
-	// ????????????????
-
-}
-
 
 void coletaDados(Grafo* g, int R, int C, FILE* e){
 
@@ -172,23 +168,24 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
 
 	while(contador < R*C){
 
-            if(fscanf(e, "%d", &valor) == 1){
+        if(fscanf(e, "%d", &valor) == 1){
 
-                insereVertice(g, valor);
-                contador++;
-        
-                if(contador%C != 0)
-                    insereAresta(g, contador, contador+1, 1);
-                if(contador <= ((R*C)-C))
-                    insereAresta(g, contador, contador+C, 1);
+            insereVertice(g, valor);
+            contador++;
 
-            }
+            if(contador%C != 0)
+                insereAresta(g, contador, contador+1, 0);
+            if(contador <= ((R*C)-C))
+	            insereAresta(g, contador, contador+C, 0);
+
+
+		}
             
-        }
+    }
 
 }
 
-void solucao1(Grafo* g, FILE* s){
+int solucao1(Grafo* g){
 
 	int hpAtual = 0;
 	int hpTotal = 0;
@@ -229,14 +226,72 @@ void solucao1(Grafo* g, FILE* s){
 	if(hpTotal == 0)
 		hpTotal++;
 	
-	fprintf(s, "%d\n", hpTotal);
+	//fprintf(s, "%d\n", hpTotal);
+	return hpTotal;
+
+}
+
+void atualizaPeso(Grafo* g){
+	
+	// ?
+
+}
+
+int solucao2(Grafo* g){
+
+	//dijkstra
+
+	Vertice* atual = g->primeiro->prox;
+	atual->peso = 0;
+	Lista* adj;
+	Item* itemAux;
+	Vertice* aux;
+	Vertice* prox;
+
+	while(atual != g->ultimo){
+
+		adj = atual->adjacentes;
+		itemAux = adj->primeiro->proximo;
+
+		prox = encontraVertice(g, itemAux->destino);
+
+		while(itemAux != NULL){
+			
+			aux = encontraVertice(g, itemAux->destino);
+
+
+			if(aux->peso > itemAux->peso + atual->peso){
+				
+				aux->peso = itemAux->peso + atual->peso;
+				aux->antecessor = atual;
+
+			}
+
+			itemAux = itemAux->proximo;
+
+
+		}
+
+		atual = (prox->peso <= aux->peso ? prox : aux);
+
+	}
+	
+	return g->ultimo->peso;
 
 }
 
 void solucao(Grafo* g, int solucao, FILE* s){
 
+	int hp;
+
 	if(solucao == 1)
-		solucao1(g, s);
+		hp = solucao1(g);
+	else if(solucao == 2){
+		hp = solucao2(g);
+		if(hp == 0){
+			hp++;
+		}
+	}
 
-
+	fprintf(s, "%d\n", hp);
 }
