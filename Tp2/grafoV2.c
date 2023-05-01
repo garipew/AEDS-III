@@ -165,27 +165,25 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
 
 	int contador = 0;
 	int valor;
-        int peso;
-        // esse peso é foreshadowing
 
 	while(contador < R*C){
 
         if(fscanf(e, "%d", &valor) == 1){
 
             insereVertice(g, valor);
-            peso = valor * -1;
             
             contador++;
 
             if(contador%C != 0)
-                insereAresta(g, contador, contador+1, peso);
+                insereAresta(g, contador, contador+1, valor);
             if(contador <= ((R*C)-C))
-	            insereAresta(g, contador, contador+C, peso);
-
+	            insereAresta(g, contador, contador+C, valor);
 
 		}
             
     }
+
+	//construirArestas(g, R, C);
 
 }
 
@@ -234,15 +232,12 @@ int solucao1(Grafo* g){
 
 }
 
-void atualizaPeso(Grafo* g){
-	
-	// ?
-
-}
-
 int solucao2(Grafo* g){
 
-	//dijkstra
+	//dijkstra ? acho que não
+	// não da pra usar com pesos negativos
+
+	return 0;
 
 }
 

@@ -238,11 +238,11 @@ void imprimeLista(Lista* l){
 	Item* atual = l->primeiro->proximo;
 	while(atual!=NULL){
 		if(atual->proximo!=NULL){
-			printf("v%d, ", atual->destino);
+			printf("v%d : %d, ", atual->destino, atual->peso);
 			atual = atual->proximo;
 		}
 		else{
-			printf("v%d", atual->destino);
+			printf("v%d : %d", atual->destino, atual->peso);
 			atual = atual->proximo;
 		}
 	}
