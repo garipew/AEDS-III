@@ -10,8 +10,6 @@ Vertice* criaVertice(int valor){
 	v->id = 0;
 	v->adjacentes = NULL;
 	v->valor = valor;
-	v->peso = 1000000000;
-	v->antecessor = NULL;
 
 	return v;
 
@@ -146,7 +144,7 @@ void desenhaGrafo(Grafo* g){
 
 	while(atual != NULL){
 
-		printf("v%d = %d\n", atual->id, atual->valor);
+		printf("v%d\n", atual->id);
 		if(atual->adjacentes != NULL)
 			imprimeLista(atual->adjacentes);
 		atual = atual->prox;
@@ -232,26 +230,43 @@ int solucao1(Grafo* g){
 
 }
 
-int solucao2(Grafo* g){
+void solucao2(Grafo* g, Vertice* o, int hp){
 
-	//dijkstra ? acho que não
-	// não da pra usar com pesos negativos
+/*
+solucao2() percorre todos os possíveis caminhos do grafo
+e retorna o maior valor possivel da soma dos vetores do caminho	
 
-	return 0;
+*/
+
+	int max = hp+o->valor;
+
+	if(o->id == g->ultimo->id){
+		
+		printf("%d\n", max);
+		return;
+
+	}
+
+	Vertice* direita = encontraVertice(g, o->adjacentes->primeiro->proximo->destino);
+	Vertice* baixo = NULL;
+	solucao2(g, direita, max);
+	if(o->adjacentes->tamanho == 2){
+		baixo = encontraVertice(g, o->adjacentes->primeiro->proximo->proximo->destino);
+		solucao2(g, baixo, max);
+	}
+
+	//return max;
 
 }
 
 void solucao(Grafo* g, int solucao, FILE* s){
 
-	int hp;
+	int hp = 0;
 
 	if(solucao == 1)
 		hp = solucao1(g);
 	else if(solucao == 2){
-		hp = solucao2(g);
-		if(hp == 0){
-			hp++;
-		}
+		solucao2(g, g->primeiro->prox, 0);
 	}
 
 	fprintf(s, "%d\n", hp);

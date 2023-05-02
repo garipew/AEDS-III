@@ -34,6 +34,7 @@ void main(int argc, char* argv[]){
         fscanf(e, "%d %d", &R, &C);
         
         coletaDados(g, R, C, e);
+    
         solucao(g, sol, s);
 
         apagaGrafo(g);
