@@ -10,6 +10,7 @@ Vertice* criaVertice(int valor){
 	v->id = 0;
 	v->adjacentes = NULL;
 	v->valor = valor;
+	v->hpFinal = -2147483647;
 
 	return v;
 
@@ -230,7 +231,7 @@ int solucao1(Grafo* g){
 
 }
 
-void solucao2(Grafo* g, Vertice* o, int hp){
+void solucao2(Grafo* g, Vertice* o, int hp, int hpMin){
 
 /*
 solucao2() percorre todos os possíveis caminhos do grafo
@@ -239,23 +240,63 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 */
 
 	int max = hp+o->valor;
+	if(max < hpMin){
+		max = hpMin;
+	}
+
+	/*
+	max representa a soma total de vida até o momento,
+	caso seja menor que o minimo necessário para alcançar
+	tal ponto, é substituida por esse minimo.
+	
+	*/
+
+	int min = hpMin;
+	/*
+	em primeiro momento o minimo para alcançar um ponto permance igual,
+	se altera apenas caso a soma de vida seja um valor negativo.
+	*/
+
 
 	if(o->id == g->ultimo->id){
+
+		/*
+		ao alcançar o destino são feitas comparações para ver se
+		um caminho melhor foi encontrado (da pra explicar isso melhor)
+		*/
 		
-		printf("%d\n", max);
+		if(o->hpFinal < 0 && max >= o->hpFinal){
+			o->hpFinal = max;
+			
+		} else if(o->hpFinal >= 0 && max < o->hpFinal){
+			o->hpFinal = max;
+		}
+
 		return;
 
 	}
 
+	/*
+	atualiza o minimo de vida necessário para este ponto.
+	*/
+	if(max < 0){
+		min = (-1*max) + 1;
+	}
+	
+
+	/*
+	chamadas recursivas para percorrer todos
+	os possíveis caminhos até o objetivo
+	*/
 	Vertice* direita = encontraVertice(g, o->adjacentes->primeiro->proximo->destino);
 	Vertice* baixo = NULL;
-	solucao2(g, direita, max);
+	solucao2(g, direita, max, min);
 	if(o->adjacentes->tamanho == 2){
 		baixo = encontraVertice(g, o->adjacentes->primeiro->proximo->proximo->destino);
-		solucao2(g, baixo, max);
+		solucao2(g, baixo, max, min);
 	}
 
-	//return max;
+	return;
 
 }
 
@@ -266,7 +307,8 @@ void solucao(Grafo* g, int solucao, FILE* s){
 	if(solucao == 1)
 		hp = solucao1(g);
 	else if(solucao == 2){
-		solucao2(g, g->primeiro->prox, 0);
+		solucao2(g, g->primeiro->prox, 0, g->ultimo->hpFinal);
+		hp = g->ultimo->hpFinal;
 	}
 
 	fprintf(s, "%d\n", hp);

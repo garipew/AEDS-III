@@ -6,6 +6,7 @@ typedef struct vertice{
 	Lista* adjacentes;
 	int id;
 	int valor;
+	int hpFinal;
 
 	struct vertice* prox;
 	struct vertice* ant;
@@ -34,5 +35,5 @@ Grafo* transposto(Grafo*);
 int obtemMin(Grafo*);
 void coletaDados(Grafo*, int, int, FILE*);
 int solucao1(Grafo*);
-void solucao2(Grafo*, Vertice*, int);
+void solucao2(Grafo*, Vertice*, int, int);
 void solucao(Grafo*, int, FILE*);
