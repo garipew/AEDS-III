@@ -10,7 +10,6 @@ Vertice* criaVertice(int valor){
 	v->id = 0;
 	v->adjacentes = NULL;
 	v->valor = valor;
-	v->hpFinal = -2147483647;
 
 	return v;
 
@@ -67,6 +66,8 @@ Vertice* encontraVertice(Grafo* g, int v){
 
 void insereAresta(Grafo* g, int v1, int v2, int peso){
 
+	// Adiciona na lista de adjacentes de v1 um item com o id de v2.
+
 	Vertice* origem = encontraVertice(g, v1);
 	if(origem == NULL)
 		return;
@@ -79,6 +80,8 @@ void insereAresta(Grafo* g, int v1, int v2, int peso){
 
 int existeAresta(Grafo* g, int v1, int v2){
 
+	// Busca v2 na lista de adjacentes de v1, retorna 1 caso encontre e 0 caso contrário.
+
 	Vertice* origem = encontraVertice(g, v1);
 
 	if(origem == NULL)
@@ -90,6 +93,7 @@ int existeAresta(Grafo* g, int v1, int v2){
 
 Lista* obtemAdjacentes(Grafo* g, int v){
 
+	// Retorna a lista de adjacentes de um vertice qualquer, baseado em seu id.
 	Vertice* origem = encontraVertice(g, v);
 
 	if(origem == NULL)
@@ -181,8 +185,10 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
             
             contador++;
 
+			// Insere arestas para direita em todos os elementos, exceto nos da última coluna da grid.
             if(contador%C != 0)
                 insereAresta(g, contador, contador+1, 1);
+			// Insere arestas para baixo em todos os elementos, exceto nos da última linha.
             if(contador <= ((R*C)-C))
 	            insereAresta(g, contador, contador+C, 1);
 
@@ -214,6 +220,10 @@ int solucao1(Grafo* g){
 
 
 		if(atual->adjacentes->tamanho == 2){
+			/*
+			Caso o vértice atual tenha 2 adjacentes, o proximo vértice
+			percorrido será o de maior valor.
+			*/
 
 			aux2 = encontraVertice(g, adj->proximo->destino);
 			atual = (aux->valor >= aux2->valor ? aux : aux2);
@@ -225,8 +235,16 @@ int solucao1(Grafo* g){
 		hpAtual += atual->valor;
 
 		if(hpAtual+hpTotal <= 0){
+			/*
+			Dessa forma, há a garantia que hpTotal sempre será o menor inteiro maior que
+			hpAtual, fazendo com que a soma de ambos seja maior que 0.
+			*/
 			hpTotal = ((-1*hpAtual)+1);	
 		}else if(hpTotal > atual->valor && atual->valor > 0){
+			/*
+			Ao somá-los, o novo numero permanece maior que zero, como o buscado é o menor hpTotal possível,
+			o valor atual é subtraído de hpTotal, dessa forma, hpTotal permanece maior que zero e é menor agora.
+			*/
 			hpTotal-= atual->valor;
 		}
 
@@ -237,7 +255,8 @@ int solucao1(Grafo* g){
 
 	if(hpTotal == 0)
 		hpTotal++;
-	
+	// O minimo necessário é 1.
+
 	return hpTotal;
 
 }
@@ -268,6 +287,15 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 	se altera apenas caso a soma de vida seja um valor negativo.
 	*/
 
+	if(min >= g->ultimo->hpFinal){
+		/*
+		caso o minimo de hp necessario no vertice atual seja
+		maior ou igual ao hpFinal encontrado previamente por outro caminho,
+		este caminho não é promissor.
+		*/
+		return;
+	}
+
 
 	if(o->id == g->ultimo->id){
 
@@ -283,12 +311,12 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 			o->hpFinal = max;
 		}
 
-		/*
-		caso min < 0, significa que não há nenhuma perda de hp
-		nesse caminho, sendo assim, o hp necessario é o menor possível,
-		sendo ele 1.
-		*/
 		if(min < 0){
+			/*
+			Caso min < 0, significa que não há nenhuma perda de hp
+			nesse caminho, sendo assim, o hp necessario é o menor possível,
+			sendo ele 1.
+			*/
 			o->hpFinal = 1;
 		}
 
@@ -305,10 +333,10 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 		return;
 	}
 
-	/*
-	atualiza o minimo de vida necessário para este ponto.
-	*/
 	if(max < 0){
+		/*
+		Atualiza o minimo de vida necessário para este ponto.
+		*/
 		min = (-1*max) + 1;
 	}
 	
@@ -338,7 +366,12 @@ void solucao(Grafo* g, int solucao, FILE* s){
 	if(solucao == 1)
 		hp = solucao1(g);
 	else if(solucao == 2){
-		solucao2(g, g->primeiro->prox, 0, g->ultimo->hpFinal);
+		/*
+		Utiliza solucao1 para encontrar um hpFinal aproximado a fim de 
+		otimizar a execução da solucao2.
+		*/
+		g->ultimo->hpFinal = solucao1(g);
+		solucao2(g, g->primeiro->prox, 0, -1);
 		hp = g->ultimo->hpFinal;
 	}
 
