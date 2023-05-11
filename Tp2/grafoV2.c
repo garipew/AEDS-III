@@ -101,6 +101,7 @@ Lista* obtemAdjacentes(Grafo* g, int v){
 
 void removeAresta(Grafo* g, int v1, int v2, int peso){
 
+	// Remove uma aresta especificada do grafo
 	Vertice* origem = encontraVertice(g, v1);
 
 	if(origem == NULL)
@@ -111,6 +112,11 @@ void removeAresta(Grafo* g, int v1, int v2, int peso){
 }
 
 void apagaGrafo(Grafo* g){
+	/*
+	Percorre o grafo removendo as listas de adjacentes,
+	os vértices e por fim liberando o espaço alocado.
+	*/
+
 
 	Vertice* atual = g->primeiro;
 	Vertice* aux;
@@ -140,6 +146,8 @@ void apagaGrafo(Grafo* g){
 }
 
 void desenhaGrafo(Grafo* g){
+
+	// printa o id dos vertices e seus adjacentes
 
 	Vertice* atual = g->primeiro->prox;
 
@@ -174,19 +182,22 @@ void coletaDados(Grafo* g, int R, int C, FILE* e){
             contador++;
 
             if(contador%C != 0)
-                insereAresta(g, contador, contador+1, valor);
+                insereAresta(g, contador, contador+1, 1);
             if(contador <= ((R*C)-C))
-	            insereAresta(g, contador, contador+C, valor);
+	            insereAresta(g, contador, contador+C, 1);
 
 		}
             
     }
 
-	//construirArestas(g, R, C);
-
 }
 
 int solucao1(Grafo* g){
+
+/*
+ Percorre o grafo indo sempre para posição mais promissora
+  (de maior valor) no momento, sem considerar passos anteriores.
+*/
 
 	int hpAtual = 0;
 	int hpTotal = 0;
@@ -261,19 +272,37 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 	if(o->id == g->ultimo->id){
 
 		/*
-		ao alcançar o destino são feitas comparações para ver se
-		um caminho melhor foi encontrado (da pra explicar isso melhor)
+		O valor buscado para o->hpFinal é o número mais próximo de 1 possível,
+		sendo assim, se hpFinal < 0 então será substituido por max apenas se max >= hpFinal.
+		Se hpFinal > 0, será substituído por max somente se 0 < max < hpFinal.
 		*/
 		
 		if(o->hpFinal < 0 && max >= o->hpFinal){
 			o->hpFinal = max;
-			
 		} else if(o->hpFinal >= 0 && max < o->hpFinal){
 			o->hpFinal = max;
 		}
 
+		/*
+		caso min < 0, significa que não há nenhuma perda de hp
+		nesse caminho, sendo assim, o hp necessario é o menor possível,
+		sendo ele 1.
+		*/
+		if(min < 0){
+			o->hpFinal = 1;
+		}
+
 		return;
 
+	}
+
+	if(g->ultimo->hpFinal == 1){
+		/*
+		caso hpFinal = 1 o melhor caminho possível já foi
+		encontrado, sendo assim, não é preciso buscar melhores
+		alternativas.
+		*/
+		return;
 	}
 
 	/*
@@ -301,6 +330,8 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 }
 
 void solucao(Grafo* g, int solucao, FILE* s){
+
+	// Alterna entre as possíveis soluções.
 
 	int hp = 0;
 
