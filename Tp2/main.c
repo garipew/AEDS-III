@@ -1,11 +1,23 @@
 #include "grafoV2.h"
 #include <stdio.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 #include <stdlib.h>
-#include <getopt.h>
 #include <string.h>
 
 
 void main(int argc, char* argv[]){
+
+    /*
+    struct timeval t1, tf;
+
+    gettimeofday(&t1, NULL);
+
+    struct rusage inicio, fim;
+    getrusage(RUSAGE_SELF, &inicio);
+
+    float tCPU;
+    */
 
     int sol, R, C, testes;
     FILE* e;
@@ -42,5 +54,15 @@ void main(int argc, char* argv[]){
 
     fclose(e);
     fclose(s);
+
+    /*
+    gettimeofday(&tf, NULL);
+    printf("%.06fs\n", ((tf.tv_sec-t1.tv_sec) + 1e-6*(float)(tf.tv_usec-t1.tv_usec)));
+
+    getrusage(RUSAGE_SELF, &fim);
+ 
+    tCPU = (fim.ru_utime.tv_sec - inicio.ru_utime.tv_sec) + 1e-6*(fim.ru_utime.tv_usec - inicio.ru_utime.tv_usec);
+    printf("%.06fs\n", tCPU);
+    */
     
 }
