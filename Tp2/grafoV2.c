@@ -10,7 +10,6 @@ Vertice* criaVertice(int valor){
 	v->id = 0;
 	v->adjacentes = NULL;
 	v->valor = valor;
-	v->hpMin = 2147483647;
 
 	return v;
 
@@ -41,6 +40,7 @@ void insereVertice(Grafo* g, int valor){
 	g->ultimo->prox = v;
 	v->ant = g->ultimo;
 	g->ultimo = v;
+	v->prox = NULL;
 
 	g->tamanho++;
 	v->id = g->tamanho;
@@ -122,7 +122,6 @@ void apagaGrafo(Grafo* g){
 	os vértices e por fim liberando o espaço alocado.
 	*/
 
-
 	Vertice* atual = g->primeiro;
 	Vertice* aux = atual->prox;
 
@@ -147,7 +146,7 @@ void apagaGrafo(Grafo* g){
 	}
 
 	free(g);
-	// somehow broken now
+	// fixed?
 }
 
 void desenhaGrafo(Grafo* g){
@@ -383,6 +382,7 @@ int solucao3(Grafo* g, int C){
 	diagonal = baixo + 1;
 
 
+
 	do{
 		/*
 		Enfilera elementos a direita, baixo e diagonal.
@@ -412,8 +412,6 @@ int solucao3(Grafo* g, int C){
 				enfilera(diagonal, 3, f);
 			}
 		}
-		
-		imprimeFila(f);
 
 		aux = desenfilera(f);
 		atual = encontraVertice(g, aux->destino);
@@ -421,29 +419,54 @@ int solucao3(Grafo* g, int C){
 		switch(aux->peso){
 			
 			case 1: 
-				// Direita
+				/*
+			 	Direita, neste caso o mínimo depende apenas do vértice à esquerda.
+				Entra nessa condição apenas para os vértices da primeira linha da matriz
+				*/
+
 				esq = encontraVertice(g, aux->destino - 1);
 				atual->hpFinal = esq->hpFinal + atual->valor;
 				atual->hpMin = esq->hpMin;
 				if(atual->hpFinal <= 0){
-					atual->hpMin += (-1 * atual->hpFinal);
+					/*
+					hpMin += (hpFinal + valor) é o mínimo necessário para atravessar este vértice, tendo em vista que
+					hpMin - (hpFinal + valor) = 1.
+					Caso hpFinal + valor = 0, não funciona muito bem, visto que
+					0 = -0 e assim não haveria incremento em hpMin.
+					Por isso o incremento é dado por 
+					hpMin += (hpFinal + valor) + (hpFinal + valor == 0)
+					O último termo é 1 quando o primeiro termo do incremento é 0, sendo assim, sempre que necessário há incremento.
+					*/
+
+					atual->hpMin += (-1 * atual->hpFinal) + (atual->hpFinal == 0);
 					atual->hpFinal = 1;
 				}
 				break;
 			case 2:
-				// Baixo
+				/*
+				Baixo, mínimo depende apenas do vértice em cima.
+				Entra nessa condição apenas para os vértices da primeira coluna da matriz.
+				*/
 				cima = encontraVertice(g, aux->destino - C);
 				atual->hpFinal = cima->hpFinal + atual->valor;
 				atual->hpMin = cima->hpMin;
 				if(atual->hpFinal <= 0){
-					atual->hpMin += (-1 * atual->hpFinal);
+					atual->hpMin += (-1 * atual->hpFinal) + (atual->hpFinal == 0);
 					atual->hpFinal = 1;
 				}
 				break;
 			case 3:
-				// Diagonal
+				/*
+				Diagonal, mínimo é dado pelo menor custo entre o vértice da esquerda e o vértice de cima.
+				Entra nessa condição para a maior parte dos vértices.
+				*/
 				cima = encontraVertice(g, aux->destino - C);
 				esq = encontraVertice(g, aux->destino - 1);
+
+				/*
+				O vértice preferido é aquele com maior vida, caso ambos sejam iguais a 1, significa que
+				potencialmente houve incremento em hpMin deles, sendo assim, o desejável é o com o menor hpMin possível.
+				*/
 				if(esq->hpFinal > cima->hpFinal){
 					melhor = esq;
 				} else if(cima->hpFinal > esq->hpFinal){
@@ -454,18 +477,22 @@ int solucao3(Grafo* g, int C){
 				atual->hpFinal = melhor->hpFinal + atual->valor;
 				atual->hpMin = melhor->hpMin;
 				if(atual->hpFinal <= 0){
-					atual->hpMin += (-1 * atual->hpFinal);
+					atual->hpMin += (-1 * atual->hpFinal) + (atual->hpFinal == 0);
 					atual->hpFinal = 1;
 				}
 				break;
 
 		}
 
-		printf("v%d\n", atual->id);
 
 	} while(!filaVazia(f));
 
 	deletaFila(f);
+	
+	/*
+	Dessa forma, todos os vértices do grafo são percorridos uma única vez,
+	e o resultado obtido é o mínimo.
+	*/
 
 	return g->ultimo->hpMin;
 
@@ -478,8 +505,6 @@ void solucao(Grafo* g, int solucao, int C, FILE* s){
 	int hp = 0;
 
 	if(solucao == 1){
-		hp = solucao1(g);
-	} else if(solucao == 2){
 		/*
 		Utiliza solucao1 para encontrar um hpFinal aproximado a fim de 
 		otimizar a execução da solucao2.
@@ -487,7 +512,7 @@ void solucao(Grafo* g, int solucao, int C, FILE* s){
 		g->ultimo->hpFinal = solucao1(g);
 		solucao2(g, g->primeiro->prox, 0, -1);
 		hp = g->ultimo->hpFinal;
-	} else{
+	} else if(solucao == 2){
 		hp = solucao3(g, C);
 	}
 
