@@ -212,6 +212,13 @@ int solucao1(Grafo* g){
 	Item* adj;
 	Vertice* aux;
 	Vertice* aux2;
+	
+
+	hpAtual += atual->valor;
+
+	if(hpAtual+hpTotal <= 0){
+		hpTotal = ((-1*hpAtual)+1);	
+	}
 
 	while(atual != g->ultimo){
 
@@ -270,26 +277,32 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 */
 
 	int max = hp+o->valor;
-	if(max < hpMin){
-		max = hpMin;
-	}
-
 	/*
 	max representa a soma total de vida até o momento,
 	caso seja menor que o minimo necessário para alcançar
 	tal ponto, é substituida por esse minimo.
 	
 	*/
-
 	int min = hpMin;
 	/*
 	em primeiro momento o minimo para alcançar um ponto permance igual,
 	se altera apenas caso a soma de vida seja um valor negativo.
 	*/
 
+	if(max < 0){
+		/*
+		Atualiza o minimo de vida necessário para este ponto.
+		*/
+		min += (-1*max);
+		max = 1;
+	} else if(max == 0){
+		min++;
+		max = 1;
+	}
+
 	if(min >= g->ultimo->hpFinal){
 		/*
-		caso o minimo de hp necessario no vertice atual seja
+		Caso o minimo de hp necessario no vertice atual seja
 		maior ou igual ao hpFinal encontrado previamente por outro caminho,
 		este caminho não é promissor.
 		*/
@@ -298,17 +311,16 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 
 
 	if(o->id == g->ultimo->id){
-
 		/*
 		O valor buscado para o->hpFinal é o número mais próximo de 1 possível,
 		sendo assim, se hpFinal < 0 então será substituido por max apenas se max >= hpFinal.
 		Se hpFinal > 0, será substituído por max somente se 0 < max < hpFinal.
 		*/
 		
-		if(o->hpFinal < 0 && max >= o->hpFinal){
-			o->hpFinal = max;
-		} else if(o->hpFinal >= 0 && max < o->hpFinal){
-			o->hpFinal = max;
+		if(o->hpFinal < 0 && min >= o->hpFinal){
+			o->hpFinal = min;
+		} else if(o->hpFinal >= 0 && min < o->hpFinal){
+			o->hpFinal = min;
 		}
 
 		if(min < 0){
@@ -326,23 +338,15 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 
 	if(g->ultimo->hpFinal == 1){
 		/*
-		caso hpFinal = 1 o melhor caminho possível já foi
+		Caso hpFinal = 1 o melhor caminho possível já foi
 		encontrado, sendo assim, não é preciso buscar melhores
 		alternativas.
 		*/
 		return;
 	}
 
-	if(max < 0){
-		/*
-		Atualiza o minimo de vida necessário para este ponto.
-		*/
-		min = (-1*max) + 1;
-	}
-	
-
 	/*
-	chamadas recursivas para percorrer todos
+	Chamadas recursivas para percorrer todos
 	os possíveis caminhos até o objetivo
 	*/
 	Vertice* direita = encontraVertice(g, o->adjacentes->primeiro->proximo->destino);
@@ -352,8 +356,6 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 		baixo = encontraVertice(g, o->adjacentes->primeiro->proximo->proximo->destino);
 		solucao2(g, baixo, max, min);
 	}
-
-	return;
 
 }
 
@@ -380,7 +382,6 @@ int solucao3(Grafo* g, int C){
 	baixo = atual->id + C;
 	direita = atual->id + 1;
 	diagonal = baixo + 1;
-
 
 
 	do{
@@ -412,7 +413,7 @@ int solucao3(Grafo* g, int C){
 				enfilera(diagonal, 3, f);
 			}
 		}
-
+		
 		aux = desenfilera(f);
 		atual = encontraVertice(g, aux->destino);
 
@@ -464,15 +465,15 @@ int solucao3(Grafo* g, int C){
 				esq = encontraVertice(g, aux->destino - 1);
 
 				/*
-				O vértice preferido é aquele com maior vida, caso ambos sejam iguais a 1, significa que
-				potencialmente houve incremento em hpMin deles, sendo assim, o desejável é o com o menor hpMin possível.
+				O vértice preferido é aquele com o menor custo de chegada,
+				caso o mínimo seja igual, o melhor é aquele com maior vida.
 				*/
-				if(esq->hpFinal > cima->hpFinal){
-					melhor = esq;
-				} else if(cima->hpFinal > esq->hpFinal){
+				if(esq->hpMin > cima->hpMin){
 					melhor = cima;
+				} else if(cima->hpMin > esq->hpMin){
+					melhor = esq;
 				} else{
-					melhor = (esq->hpMin <= cima->hpMin ? esq : cima);
+					melhor = (esq->hpFinal >= cima->hpFinal ? esq : cima);
 				}
 				atual->hpFinal = melhor->hpFinal + atual->valor;
 				atual->hpMin = melhor->hpMin;
@@ -483,7 +484,6 @@ int solucao3(Grafo* g, int C){
 				break;
 
 		}
-
 
 	} while(!filaVazia(f));
 
@@ -510,7 +510,7 @@ void solucao(Grafo* g, int solucao, int C, FILE* s){
 		otimizar a execução da solucao2.
 		*/
 		g->ultimo->hpFinal = solucao1(g);
-		solucao2(g, g->primeiro->prox, 0, -1);
+		solucao2(g, g->primeiro->prox, 0, g->primeiro->prox->valor);
 		hp = g->ultimo->hpFinal;
 	} else if(solucao == 2){
 		hp = solucao3(g, C);

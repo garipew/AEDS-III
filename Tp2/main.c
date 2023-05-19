@@ -35,7 +35,7 @@ void main(int argc, char* argv[]){
     s = fopen("saida.txt", "w");
 
     if(e == NULL){
-    printf("Falha ao ler o arquivo \"%s\".\n", argv[2]);
+        printf("Falha ao ler o arquivo \"%s\".\n", argv[2]);
     }
 
     fscanf(e, "%d", &testes);

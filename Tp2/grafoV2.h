@@ -32,8 +32,6 @@ Lista* obtemAdjacentes(Grafo*, int);
 void removeAresta(Grafo*, int, int, int);
 void apagaGrafo(Grafo*);
 void desenhaGrafo(Grafo*);
-Grafo* transposto(Grafo*);
-int obtemMin(Grafo*);
 void coletaDados(Grafo*, int, int, FILE*);
 int solucao1(Grafo*);
 void solucao2(Grafo*, Vertice*, int, int);

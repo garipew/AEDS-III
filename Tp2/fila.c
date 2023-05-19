@@ -61,6 +61,8 @@ Item* desenfilera(Fila* f){
 
 void imprimeFila(Fila* f){
 
+	char tipo[] = {'d', 'b', 'D'};
+
 	if(filaVazia(f))
 		return;
 
@@ -69,7 +71,7 @@ void imprimeFila(Fila* f){
 	printf("=====\n");
 	while(aux != NULL){
 		
-		printf("%d ", aux->destino);
+		printf("%d%c ", aux->destino, tipo[aux->peso-1]);
 		aux = aux->proximo;
 
 	}
