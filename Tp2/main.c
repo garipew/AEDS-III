@@ -44,12 +44,14 @@ void main(int argc, char* argv[]){
         g = criaGrafo();
 
         fscanf(e, "%d %d", &R, &C);
-        
+        printf("%d %d\n", R, C);
+
         coletaDados(g, R, C, e);
-        
-        solucao(g, sol, s);
+
+        solucao(g, sol, C, s);
 
         apagaGrafo(g);
+
     }
 
     fclose(e);

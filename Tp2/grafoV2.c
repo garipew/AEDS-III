@@ -10,6 +10,7 @@ Vertice* criaVertice(int valor){
 	v->id = 0;
 	v->adjacentes = NULL;
 	v->valor = valor;
+	v->hpMin = 2147483647;
 
 	return v;
 
@@ -123,11 +124,10 @@ void apagaGrafo(Grafo* g){
 
 
 	Vertice* atual = g->primeiro;
-	Vertice* aux;
+	Vertice* aux = atual->prox;
 
-	while(atual->prox != NULL){
-		
-		aux = atual->prox;
+	while(aux != NULL){
+
 		if(aux->adjacentes != NULL)
 			deletaLista(aux->adjacentes);
 
@@ -138,15 +138,16 @@ void apagaGrafo(Grafo* g){
 		g->tamanho--;
 		if(g->tamanho == 0)
 			g->ultimo = g->primeiro;
-		if(aux != NULL)
+		if(aux != NULL){
 			free(aux);
+		}
 
-		atual = atual->prox;
+		aux = aux->prox;
 
 	}
 
 	free(g);
-
+	// somehow broken now
 }
 
 void desenhaGrafo(Grafo* g){
@@ -357,15 +358,128 @@ e retorna o maior valor possivel da soma dos vetores do caminho
 
 }
 
-void solucao(Grafo* g, int solucao, FILE* s){
+
+int solucao3(Grafo* g, int C){
+
+	Fila* f = criaFila();
+	Vertice* atual = g->primeiro->prox;
+	Item* aux;
+	Vertice* cima;
+	Vertice* esq;
+	Vertice* melhor;
+	int baixo, direita, diagonal;
+	int vida = 0;
+
+	if(atual->valor <= 0){
+		atual->hpMin = (-1*atual->valor) + 1;
+	} else{
+		atual->hpMin = 1;
+	}
+
+	atual->hpFinal = 1;
+
+	baixo = atual->id + C;
+	direita = atual->id + 1;
+	diagonal = baixo + 1;
+
+
+	do{
+		/*
+		Enfilera elementos a direita, baixo e diagonal.
+		Encontra a vida necessária para chegar na direita e no de baixo
+		e escolhe o menor destes para encontrar o minimo para chegar na diagonal.
+		*/
+
+		baixo = atual->id + C;
+		direita = atual->id + 1;
+		diagonal = baixo + 1 * (atual->id%C != 0);
+
+
+		if((direita-1)/C == (atual->id-1)/C){
+			if(!busca(direita, f)){
+				enfilera(direita, 1, f);
+			}
+		}
+
+		if(baixo <= g->tamanho){
+			if(!busca(baixo, f)){
+				enfilera(baixo, 2, f);
+			}
+		}
+
+		if(diagonal <= g->tamanho && diagonal > 0){
+			if(!busca(diagonal, f)){
+				enfilera(diagonal, 3, f);
+			}
+		}
+		
+		imprimeFila(f);
+
+		aux = desenfilera(f);
+		atual = encontraVertice(g, aux->destino);
+
+		switch(aux->peso){
+			
+			case 1: 
+				// Direita
+				esq = encontraVertice(g, aux->destino - 1);
+				atual->hpFinal = esq->hpFinal + atual->valor;
+				atual->hpMin = esq->hpMin;
+				if(atual->hpFinal <= 0){
+					atual->hpMin += (-1 * atual->hpFinal);
+					atual->hpFinal = 1;
+				}
+				break;
+			case 2:
+				// Baixo
+				cima = encontraVertice(g, aux->destino - C);
+				atual->hpFinal = cima->hpFinal + atual->valor;
+				atual->hpMin = cima->hpMin;
+				if(atual->hpFinal <= 0){
+					atual->hpMin += (-1 * atual->hpFinal);
+					atual->hpFinal = 1;
+				}
+				break;
+			case 3:
+				// Diagonal
+				cima = encontraVertice(g, aux->destino - C);
+				esq = encontraVertice(g, aux->destino - 1);
+				if(esq->hpFinal > cima->hpFinal){
+					melhor = esq;
+				} else if(cima->hpFinal > esq->hpFinal){
+					melhor = cima;
+				} else{
+					melhor = (esq->hpMin <= cima->hpMin ? esq : cima);
+				}
+				atual->hpFinal = melhor->hpFinal + atual->valor;
+				atual->hpMin = melhor->hpMin;
+				if(atual->hpFinal <= 0){
+					atual->hpMin += (-1 * atual->hpFinal);
+					atual->hpFinal = 1;
+				}
+				break;
+
+		}
+
+		printf("v%d\n", atual->id);
+
+	} while(!filaVazia(f));
+
+	deletaFila(f);
+
+	return g->ultimo->hpMin;
+
+}
+
+void solucao(Grafo* g, int solucao, int C, FILE* s){
 
 	// Alterna entre as possíveis soluções.
 
 	int hp = 0;
 
-	if(solucao == 1)
+	if(solucao == 1){
 		hp = solucao1(g);
-	else if(solucao == 2){
+	} else if(solucao == 2){
 		/*
 		Utiliza solucao1 para encontrar um hpFinal aproximado a fim de 
 		otimizar a execução da solucao2.
@@ -373,6 +487,8 @@ void solucao(Grafo* g, int solucao, FILE* s){
 		g->ultimo->hpFinal = solucao1(g);
 		solucao2(g, g->primeiro->prox, 0, -1);
 		hp = g->ultimo->hpFinal;
+	} else{
+		hp = solucao3(g, C);
 	}
 
 	fprintf(s, "%d\n", hp);

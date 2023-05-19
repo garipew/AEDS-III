@@ -1,4 +1,4 @@
-#include "lista.h"
+#include "fila.h"
 #include <stdio.h>
 
 typedef struct vertice{
@@ -7,6 +7,7 @@ typedef struct vertice{
 	int id;
 	int valor;
 	int hpFinal;
+	int hpMin;
 
 	struct vertice* prox;
 	struct vertice* ant;
@@ -36,4 +37,5 @@ int obtemMin(Grafo*);
 void coletaDados(Grafo*, int, int, FILE*);
 int solucao1(Grafo*);
 void solucao2(Grafo*, Vertice*, int, int);
-void solucao(Grafo*, int, FILE*);
+int solucao3(Grafo*, int);
+void solucao(Grafo*, int, int, FILE*);
