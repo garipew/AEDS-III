@@ -141,12 +141,13 @@ void apagaGrafo(Grafo* g){
 			free(aux);
 		}
 
-		aux = aux->prox;
+		aux = atual->prox;
 
 	}
 
+	free(g->primeiro);
 	free(g);
-	// fixed?
+
 }
 
 void desenhaGrafo(Grafo* g){
@@ -484,6 +485,8 @@ int solucao3(Grafo* g, int C){
 				break;
 
 		}
+
+		free(aux);
 
 	} while(!filaVazia(f));
 

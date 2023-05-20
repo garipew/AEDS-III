@@ -107,15 +107,30 @@ int busca(int id, Fila* f){
 
 void deletaFila(Fila* f){
 	
-	Item* aux;
+	Item* atual = f->primeiro;
+	Item* aux = atual->proximo;
 
-	while(!filaVazia(f)){
-	
-		aux = desenfilera(f);
-		free(aux);
+	while(aux != NULL){
+		
+		atual->proximo = aux->proximo;
+		if(aux->proximo == NULL){
+			f->ultimo = atual;
+		}
+		f->tamanho--;
+
+		if(f->tamanho == 0){
+			f->ultimo = f->primeiro;
+		}
+		
+		if(aux != NULL){
+			free(aux);
+		}
+		
+		aux = atual->proximo;
 	
 	}
 
+	free(f->primeiro);
 	free(f);
 
 }
