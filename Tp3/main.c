@@ -11,18 +11,36 @@ void main(int argc, char* argv[]){
     char s[100];
     char out[] = "out";
     int contador = 0;
+    Lista* padrao;
+    Lista* texto;
 
-    
-    printf("%s\n", argv[1]);
-    strcpy(s, argv[1]);
+    int T;
+    char c;
 
-    while(s[contador] != '.'){
-        contador++;
+    entrada = fopen(argv[1], "r");
+
+    fscanf(entrada, "%d ", &T);
+
+    for(int i = 0; i < T; i++){
+        padrao = criaListaVazia();
+        texto = criaListaVazia();
+
+        while((c = getc(entrada)) != ' '){
+            inserir(padrao, criaItem(c));
+        }
+        while((c = getc(entrada)) != EOF){
+            if(c == '\n'){
+                break;
+            }
+            inserir(texto, criaItem(c));
+        }
+
+        imprimeLista(padrao);
+        imprimeLista(texto);
+        
+        deletaLista(padrao);
+        deletaLista(texto);
     }
 
-    for(int i = 0; i < 3; i++){
-        s[contador+i+1] = out[i];
-    }
-    printf("%s\n", s);
 
 }
