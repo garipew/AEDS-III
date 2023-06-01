@@ -25,6 +25,7 @@ Item* criaOrigem(){
         Item* o = (Item*) malloc(sizeof(Item));
         
         o->id = ' ';
+        o->indice = -1;
 
         return o;
 
@@ -55,7 +56,7 @@ void inserir(Lista* l, Item* i){
         i->proximo = NULL;
         l->ultimo->proximo = i;
         l->ultimo = i;
-        l->tamanho++;
+        i->indice = l->tamanho++;
 
 
 }
@@ -109,7 +110,6 @@ void removeElemento(Lista* l, char ident){
                                 l->ultimo = l->primeiro;
                         }
 
-                        //c = aux->coord;
                         if(aux!=NULL)
                                 free(aux);
                         return;

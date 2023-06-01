@@ -2,6 +2,7 @@
 typedef struct item{
 
     char id;
+    int indice;
 
     struct item *proximo;
 
