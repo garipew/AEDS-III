@@ -142,21 +142,21 @@ void deletaLista(Lista* l){
 
 }
 
-int buscarElemento(Lista* l, char id){
+Item* buscarElemento(Lista* l, int id){
         if(listaVazia(l))
-                return 0;
+                return NULL;
 
         Item* atual = l->primeiro->proximo;
 
         // f(n) = n + 1 + g(n)
         // f(n) = 2n + 1 = O(n)
         while(atual!=NULL){
-                if(id == atual->id) // g(n) = n
-                        return 1;
+                if(id == atual->indice) // g(n) = n
+                        return atual;
                 atual = atual->proximo;
         }
 
-        return 0;
+        return NULL;
 
         // F(n) = O(n)
 }
@@ -169,14 +169,63 @@ void imprimeLista(Lista* l){
 
 	Item* atual = l->primeiro->proximo;
 	while(atual!=NULL){
-		if(atual->proximo!=NULL){
-			printf("%c, ", atual->id);
-			atual = atual->proximo;
-		}
-		else{
-			printf("%c", atual->id);
-			atual = atual->proximo;
-		}
+		printf("%c", atual->id);
+		atual = atual->proximo;
 	}
 	printf("\n");
+}
+
+void sol1(Lista* texto, Lista* padrao){
+        
+        Item* atualT;
+        Item* atualP;
+        int inicioC = -1;
+        int casou = 0;
+
+        atualT = texto->primeiro->proximo;
+        atualP = padrao->primeiro->proximo;
+
+        // Enquanto o texto não acabar, continua procurando
+
+        while(atualT != NULL){
+
+                
+                if(atualT->id == atualP->id){
+
+                        if(atualP->indice == 0){
+                                //Inicio do casamento
+                                inicioC = atualT->indice;
+                        }
+                        atualP = atualP->proximo;
+                        if(atualP == NULL){
+                                //Chegou ao final do padrão
+                                printf("S %d\n", inicioC+1);
+                                casou = 1;
+                                break;
+                        }
+
+                } else{
+                        //Retorna ao inicio do padrão
+                        atualP = padrao->primeiro->proximo;
+                        if(inicioC != -1){
+                                //Retorna a letra que iniciou o casamento, caso estivesse em um
+                                atualT = buscarElemento(texto, inicioC);
+                                inicioC = -1;
+                        }
+                }
+
+                if((inicioC != -1) && (atualT->proximo == NULL)){
+                        // Está em um casamento e o texto chegou ao fim
+                        atualT = texto->primeiro->proximo;
+                } else{
+                        atualT = atualT->proximo;
+                }
+                        
+        }
+
+       if(casou == 0){
+                //Não houve casamento.
+                printf("N\n");
+       }
+    
 }

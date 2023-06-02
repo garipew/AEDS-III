@@ -25,6 +25,7 @@ Item* criaOrigem();
 void inserir(Lista*, Item*);
 int listaVazia(Lista*);
 void removeElemento(Lista*, char);
-int buscarElemento(Lista*, char);
+Item* buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 void imprimeLista(Lista*);
+void sol1(Lista*, Lista*);

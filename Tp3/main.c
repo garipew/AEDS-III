@@ -22,7 +22,16 @@ void main(int argc, char* argv[]){
     int T;
     char c;
 
+    if(argc < 2){
+        printf("Esperado argumentos <entrada> e <caso_teste>\n");
+        exit(-1);
+    }
+
     entrada = fopen(argv[1], "r");
+    if(entrada == NULL){
+        printf("Falha ao ler arquivo %s.\n", argv[1]);
+        exit(-1);
+    }
 
     fscanf(entrada, "%d ", &T);
 
@@ -40,46 +49,15 @@ void main(int argc, char* argv[]){
             inserir(texto, criaItem(c));
         }
 
-        a = texto->ultimo->anterior;
-        while(a->anterior != NULL){
-            inserir(texto, criaItem(a->id));
-            a = a->anterior;
-        }
-
-        atualT = texto->primeiro->proximo;
-        atualP = padrao->primeiro->proximo;
-        while(atualT != NULL){
-
-            if(atualT->id == atualP->id){
-                if(atualP->indice == 0){
-                    inicioC = atualT->indice;
-                }
-                if(atualP->indice == padrao->ultimo->indice){
-                    printf("S %d\n", inicioC+1);
-                    break;
-                }
-                atualP = atualP->proximo;
-            }else if((atualT->id != atualP->id)){
-                atualP = padrao->primeiro->proximo;
-                if(inicioC != -1){
-                    while(atualT->indice != inicioC){
-                        atualT = atualT->anterior;
-                    }
-                    inicioC = -1;
-                }
-            }
-            
-            atualT = atualT->proximo;
-        }
-        inicioC = -1;
-        if(atualP->indice != padrao->ultimo->indice){
-            printf("N\n");
-        }
-
         
+        sol1(texto, padrao);
+        
+
         deletaLista(padrao);
         deletaLista(texto);
+
     }
 
+    fclose(entrada);
 
 }
