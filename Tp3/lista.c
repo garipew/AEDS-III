@@ -175,7 +175,7 @@ void imprimeLista(Lista* l){
 	printf("\n");
 }
 
-void sol1(Lista* texto, Lista* padrao){
+void sol1(Lista* texto, Lista* padrao, FILE* out){
         
         Item* atualT;
         Item* atualP;
@@ -199,7 +199,7 @@ void sol1(Lista* texto, Lista* padrao){
                         atualP = atualP->proximo;
                         if(atualP == NULL){
                                 //Chegou ao final do padrão
-                                printf("S %d\n", inicioC+1);
+                                fprintf(out, "S %d\n", inicioC+1);
                                 casou = 1;
                                 break;
                         }
@@ -225,7 +225,17 @@ void sol1(Lista* texto, Lista* padrao){
 
        if(casou == 0){
                 //Não houve casamento.
-                printf("N\n");
+                fprintf(out, "N\n");
        }
     
+}
+
+
+void sol2(Lista* texto, Lista* padrao){
+        //Boyer Moore Horspool
+}
+
+
+void sol3(Lista* texto, Lista* padrao){
+        // Shift and
 }

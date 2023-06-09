@@ -1,3 +1,4 @@
+#include <stdio.h>
 
 typedef struct item{
 
@@ -28,4 +29,4 @@ void removeElemento(Lista*, char);
 Item* buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 void imprimeLista(Lista*);
-void sol1(Lista*, Lista*);
+void sol1(Lista*, Lista*, FILE*);

@@ -9,8 +9,7 @@ void main(int argc, char* argv[]){
     FILE* saida;
 
     char s[100];
-    char out[] = "out";
-    int contador = 0;
+    int contador = -1;
     Lista* padrao;
     Lista* texto;
     Item* a;
@@ -32,6 +31,11 @@ void main(int argc, char* argv[]){
         printf("Falha ao ler arquivo %s.\n", argv[1]);
         exit(-1);
     }
+    
+    strncpy(s, argv[1], (strlen(argv[1]) - 3));
+    strcat(s, "out");
+
+    saida = fopen(s, "w");
 
     fscanf(entrada, "%d ", &T);
 
@@ -50,7 +54,7 @@ void main(int argc, char* argv[]){
         }
 
         
-        sol1(texto, padrao);
+        sol1(texto, padrao, saida);
         
 
         deletaLista(padrao);
