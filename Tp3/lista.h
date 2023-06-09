@@ -29,4 +29,4 @@ void removeElemento(Lista*, char);
 Item* buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 void imprimeLista(Lista*);
-void sol1(Lista*, Lista*, FILE*);
+void sol(Lista*, Lista*, FILE*, int);

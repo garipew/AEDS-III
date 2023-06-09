@@ -231,11 +231,28 @@ void sol1(Lista* texto, Lista* padrao, FILE* out){
 }
 
 
-void sol2(Lista* texto, Lista* padrao){
+void sol2(Lista* texto, Lista* padrao, FILE* out){
         //Boyer Moore Horspool
 }
 
 
-void sol3(Lista* texto, Lista* padrao){
+void sol3(Lista* texto, Lista* padrao, FILE* out){
         // Shift and
+}
+
+void sol(Lista* texto, Lista* padrao, FILE* out, int solucao){
+
+        switch(solucao){
+
+                case 1:
+                        sol1(texto, padrao, out);
+                        break;
+                case 2: 
+                        sol2(texto, padrao, out);
+                        break;
+                case 3: 
+                        sol3(texto, padrao, out);
+
+        }
+
 }

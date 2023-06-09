@@ -8,19 +8,14 @@ void main(int argc, char* argv[]){
     FILE* entrada;
     FILE* saida;
 
-    char s[100];
-    int contador = -1;
     Lista* padrao;
     Lista* texto;
-    Item* a;
-
-    Item* atualP;
-    Item* atualT;
-    int inicioC;
 
     int T;
+    char s[100];
     char c;
 
+    // Verificando parâmetros
     if(argc < 2){
         printf("Esperado argumentos <entrada> e <caso_teste>\n");
         exit(-1);
@@ -31,18 +26,25 @@ void main(int argc, char* argv[]){
         printf("Falha ao ler arquivo %s.\n", argv[1]);
         exit(-1);
     }
-    
+
+    // Construindo arquivo de saída    
     strncpy(s, argv[1], (strlen(argv[1]) - 3));
     strcat(s, "out");
 
     saida = fopen(s, "w");
+    if(saida == NULL){
+        printf("Falha ao escrever arquivo %s.\n", s);
+        exit(-1);
+    }
 
+    // Executando casos-teste
     fscanf(entrada, "%d ", &T);
 
     for(int i = 0; i < T; i++){
         padrao = criaListaVazia();
         texto = criaListaVazia();
 
+        // Coletando padrão e texto
         while((c = getc(entrada)) != ' '){
             inserir(padrao, criaItem(c));
         }
@@ -53,8 +55,8 @@ void main(int argc, char* argv[]){
             inserir(texto, criaItem(c));
         }
 
-        
-        sol1(texto, padrao, saida);
+        // Executando solução selecionada
+        sol(texto, padrao, saida, argv[2]);
         
 
         deletaLista(padrao);
@@ -63,5 +65,6 @@ void main(int argc, char* argv[]){
     }
 
     fclose(entrada);
+    fclose(saida);
 
 }
