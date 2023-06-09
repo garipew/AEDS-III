@@ -30,3 +30,4 @@ Item* buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 void imprimeLista(Lista*);
 void sol(Lista*, Lista*, FILE*, int);
+void casosTeste(int, FILE*, FILE*, char*);

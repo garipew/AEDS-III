@@ -13,7 +13,6 @@ void main(int argc, char* argv[]){
 
     int T;
     char s[100];
-    char c;
 
     // Verificando parâmetros
     if(argc < 2){
@@ -40,29 +39,7 @@ void main(int argc, char* argv[]){
     // Executando casos-teste
     fscanf(entrada, "%d ", &T);
 
-    for(int i = 0; i < T; i++){
-        padrao = criaListaVazia();
-        texto = criaListaVazia();
-
-        // Coletando padrão e texto
-        while((c = getc(entrada)) != ' '){
-            inserir(padrao, criaItem(c));
-        }
-        while((c = getc(entrada)) != EOF){
-            if(c == '\n'){
-                break;
-            }
-            inserir(texto, criaItem(c));
-        }
-
-        // Executando solução selecionada
-        sol(texto, padrao, saida, argv[2]);
-        
-
-        deletaLista(padrao);
-        deletaLista(texto);
-
-    }
+    casosTeste(T, entrada, saida, argv[2]);
 
     fclose(entrada);
     fclose(saida);

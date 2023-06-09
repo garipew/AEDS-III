@@ -256,3 +256,36 @@ void sol(Lista* texto, Lista* padrao, FILE* out, int solucao){
         }
 
 }
+
+void casosTeste(int T, FILE* entrada, FILE* saida, char* in){
+
+        char c;
+
+        Lista* texto;
+        Lista* padrao;
+
+        for(int i = 0; i < T; i++){
+                padrao = criaListaVazia();
+                texto = criaListaVazia();
+
+                // Coletando padrão e texto
+                while((c = getc(entrada)) != ' '){
+                inserir(padrao, criaItem(c));
+                }
+                while((c = getc(entrada)) != EOF){
+                if(c == '\n'){
+                        break;
+                }
+                inserir(texto, criaItem(c));
+                }
+
+                // Executando solução selecionada
+                sol(texto, padrao, saida, atoi(in));
+                
+
+                deletaLista(padrao);
+                deletaLista(texto);
+        
+        }
+
+}
