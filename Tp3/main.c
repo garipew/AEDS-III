@@ -39,7 +39,7 @@ void main(int argc, char* argv[]){
     // Executando casos-teste
     fscanf(entrada, "%d ", &T);
 
-    casosTeste(T, entrada, saida, argv[2]);
+    casosTeste(T, entrada, saida, atoi(argv[2]));
 
     fclose(entrada);
     fclose(saida);

@@ -26,6 +26,7 @@ Item* criaOrigem(){
         
         o->id = ' ';
         o->indice = -1;
+        o->sla = -1;
 
         return o;
 
@@ -33,13 +34,14 @@ Item* criaOrigem(){
 
 }
 
-Item* criaItem(char id){
+Item* criaItem(char id, int a){
 
         Item* c = (Item*) malloc(sizeof(Item));
 
         c->proximo = NULL;
         c->anterior = NULL;
 
+        c->sla = a; // Encontra um nome melhor pra esses dois.
         c->id = id;
 
         return c;
@@ -161,6 +163,26 @@ Item* buscarElemento(Lista* l, int id){
         // F(n) = O(n)
 }
 
+Item* buscarId(Lista* l, char id){
+        if(listaVazia(l))
+                return NULL;
+
+        Item* atual = l->primeiro->proximo;
+
+        // f(n) = n + 1 + g(n)
+        // f(n) = 2n + 1 = O(n)
+        while(atual!=NULL){
+                if(id == atual->id) // g(n) = n
+                        return atual;
+                atual = atual->proximo;
+        }
+
+        return NULL;
+
+        // F(n) = O(n)
+}
+
+
 void imprimeLista(Lista* l){
 
 	if(listaVazia(l)){
@@ -169,7 +191,7 @@ void imprimeLista(Lista* l){
 
 	Item* atual = l->primeiro->proximo;
 	while(atual!=NULL){
-		printf("%c", atual->id);
+		printf("%c : %d\n", atual->id, atual->sla);
 		atual = atual->proximo;
 	}
 	printf("\n");
@@ -230,9 +252,44 @@ void sol1(Lista* texto, Lista* padrao, FILE* out){
     
 }
 
+Lista* presol2(Lista* p){
+        // Pre-processamento da solução 2
+        Lista* a = criaListaVazia();
+        Item* aux;
+        Item* encontrados;
+
+        char alfabeto[] = "abcdefghijklmnopqrstuvwxyz";
+
+        // Maior salto possível para todo alfabeto.
+        for(int i = 0; i < 26; i++){
+                inserir(a, criaItem(alfabeto[i], p->tamanho));
+        }
+
+        /*
+        Ajusta salto para letras no padrão para tamanho - indice,
+        com exceção da última letra que mantém o valor de salto definido.
+        */
+        aux = p->primeiro->proximo;
+        while(aux != NULL){
+
+                encontrados = buscarId(a, aux->id);
+                if(encontrados != NULL){
+                        encontrados->sla = (p->tamanho - aux->indice == 1 ? encontrados->sla : p->tamanho - aux->indice -1);
+                }
+
+                aux = aux->proximo;
+        }
+
+
+        return a;
+
+}
 
 void sol2(Lista* texto, Lista* padrao, FILE* out){
         //Boyer Moore Horspool
+        
+        Lista* alfabeto = presol2(padrao);
+        
 }
 
 
@@ -257,7 +314,7 @@ void sol(Lista* texto, Lista* padrao, FILE* out, int solucao){
 
 }
 
-void casosTeste(int T, FILE* entrada, FILE* saida, char* in){
+void casosTeste(int T, FILE* entrada, FILE* saida, int escolhida){
 
         char c;
 
@@ -270,17 +327,17 @@ void casosTeste(int T, FILE* entrada, FILE* saida, char* in){
 
                 // Coletando padrão e texto
                 while((c = getc(entrada)) != ' '){
-                inserir(padrao, criaItem(c));
+                inserir(padrao, criaItem(c, -1));
                 }
                 while((c = getc(entrada)) != EOF){
                 if(c == '\n'){
                         break;
                 }
-                inserir(texto, criaItem(c));
+                inserir(texto, criaItem(c, -1));
                 }
 
                 // Executando solução selecionada
-                sol(texto, padrao, saida, atoi(in));
+                sol(texto, padrao, saida, escolhida);
                 
 
                 deletaLista(padrao);

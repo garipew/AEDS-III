@@ -4,6 +4,7 @@ typedef struct item{
 
     char id;
     int indice;
+    int sla;
 
     struct item *proximo;
 
@@ -21,7 +22,7 @@ typedef struct lista{
 }Lista;
 
 Lista* criaListaVazia();
-Item* criaItem(char);
+Item* criaItem(char, int);
 Item* criaOrigem();
 void inserir(Lista*, Item*);
 int listaVazia(Lista*);
@@ -30,4 +31,4 @@ Item* buscarElemento(Lista*, int);
 void deletaLista(Lista*);
 void imprimeLista(Lista*);
 void sol(Lista*, Lista*, FILE*, int);
-void casosTeste(int, FILE*, FILE*, char*);
+void casosTeste(int, FILE*, FILE*, int);
