@@ -63,20 +63,6 @@ void inserir(Lista* l, Item* i){
 
 }
 
-void atualiza(Lista* l, Item* j){
-
-         if(j->proximo==NULL){
-                 l->ultimo = j;
-         } else{
-                 j->proximo->anterior = j;
-         }
-        
-        j->anterior->proximo = j;
-
-        // F(n) = O(1)
-}
-
-
 int listaVazia(Lista* l){
 
         if(l == NULL)
@@ -289,7 +275,98 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
         //Boyer Moore Horspool
         
         Lista* alfabeto = presol2(padrao);
-        
+        Item* aux;
+
+        Item* atualPadrao = padrao->ultimo;
+        Item* atualTexto = texto->primeiro->proximo;
+
+        for(int j = 0; j < padrao->tamanho-1; j++){
+                // Alinhando texto e padrão.
+                if(atualTexto->proximo == NULL){
+                        atualTexto = texto->primeiro->proximo;
+                        continue;
+                }
+                atualTexto = atualTexto->proximo;
+        }
+
+        int p = 0;
+        int letras = 0;
+
+        while(atualTexto != NULL){
+
+                
+
+                if(atualTexto->id == atualPadrao->id){
+
+                        if(atualPadrao == padrao->primeiro->proximo){
+                                // Casamento.
+                                fprintf(out, "S %d\n", atualTexto->indice+1);
+                                return;
+                        }
+
+
+                        if(atualTexto->anterior == texto->primeiro){
+                                atualTexto = texto->ultimo;
+                        } else{
+                                atualTexto = atualTexto->anterior;
+                        }
+
+                        letras++;
+
+                        atualPadrao = atualPadrao->anterior;
+                } else{
+                        // Não há casamento.
+                        atualPadrao = padrao->ultimo;
+                        
+                        aux = buscarId(alfabeto, atualTexto->id);
+
+                        for(int k = 0; k < letras; k++){
+                                // Retorna à letra do texto que iniciou o casamento.
+                                if(atualTexto->proximo == NULL){
+                                        atualTexto = texto->primeiro->proximo;
+                                        continue;
+                                }
+                                atualTexto = atualTexto->proximo;
+                        }
+                        
+                        for(int i = 0; i < aux->sla; i++){
+                                // Realiza o salto e alinha texto e padrão.
+
+                                if(p > 0){
+                                        p++;
+                                }
+
+
+                                if(atualTexto == NULL){
+                                        // Chegou ao fim e o padrao todo já passou do fim ao inicio.
+                                        break;
+                                }
+
+
+                                if((atualTexto->proximo == NULL) && (p < padrao->tamanho)){
+                                        // Ao chegar ao fim do texto, volta ao início p letras,
+                                        // nunca permitindo que o padrão inteiro retorne
+                                        atualTexto = texto->primeiro->proximo;
+                                        if(p == 0){
+                                                p = 1;
+                                        }
+                                        continue;
+
+                                }
+
+                                atualTexto = atualTexto->proximo;
+                        
+                        }
+                        
+                        letras = 0;
+
+                }
+
+
+        }
+
+        fprintf(out, "N\n");
+  
 }
 
 
@@ -327,18 +404,17 @@ void casosTeste(int T, FILE* entrada, FILE* saida, int escolhida){
 
                 // Coletando padrão e texto
                 while((c = getc(entrada)) != ' '){
-                inserir(padrao, criaItem(c, -1));
+                        inserir(padrao, criaItem(c, -1));
                 }
                 while((c = getc(entrada)) != EOF){
-                if(c == '\n'){
-                        break;
-                }
-                inserir(texto, criaItem(c, -1));
+                        if(c == '\n'){
+                                break;
+                        }
+                        inserir(texto, criaItem(c, -1));
                 }
 
-                // Executando solução selecionada
+
                 sol(texto, padrao, saida, escolhida);
-                
 
                 deletaLista(padrao);
                 deletaLista(texto);
