@@ -5,7 +5,7 @@ typedef struct item{
     char id;
     int indice;
     int salto;
-    int mascara[];
+    int mascara[100];
 
     struct item *proximo;
 

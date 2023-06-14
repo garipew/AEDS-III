@@ -44,6 +44,10 @@ Item* criaItem(char id, int salto){
         c->salto = salto; // Encontra um nome melhor pra esses dois.
         c->id = id;
 
+        for(int i = 0; i < 100; i++){
+                c->mascara[i] = 0;
+        }
+
         return c;
 
 }
@@ -177,7 +181,11 @@ void imprimeLista(Lista* l){
 
 	Item* atual = l->primeiro->proximo;
 	while(atual!=NULL){
-		printf("%c : %d\n", atual->id, atual->salto);
+		printf("%c : ", atual->id);
+                for(int i = 0; i < 100; i++){
+                        printf("%d", atual->mascara[i]);
+                }
+                printf("\n");
 		atual = atual->proximo;
 	}
 	printf("\n");
@@ -370,9 +378,36 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
   
 }
 
+Lista* presol3(Lista* texto, Lista* padrao){
+
+        Lista* a = criaListaVazia();
+        Item* atual;
+        Item* aux;
+
+        char alfabeto[] = "abcdefghijklmnopqrstuvwxyz";
+
+        for(int i = 0; i < 26; i++){
+                inserir(a, criaItem(alfabeto[i], -1));
+        }
+
+        atual = padrao->primeiro->proximo;
+
+        while(atual != NULL){
+                aux = buscarId(a, atual->id);
+                aux->mascara[atual->indice]++;
+                atual = atual->proximo;
+        }
+
+        return a;
+
+}
+
 
 void sol3(Lista* texto, Lista* padrao, FILE* out){
         // Shift and
+        Lista* alfabeto = presol3(texto, padrao);
+
+        
 }
 
 void sol(Lista* texto, Lista* padrao, FILE* out, int solucao){
@@ -416,7 +451,7 @@ void casosTeste(int T, FILE* entrada, FILE* saida, int escolhida){
 
 
                 sol(texto, padrao, saida, escolhida);
-
+                printf("=====================\n");
                 deletaLista(padrao);
                 deletaLista(texto);
         
