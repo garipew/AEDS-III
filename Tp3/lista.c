@@ -41,12 +41,14 @@ Item* criaItem(char id, int salto){
         c->proximo = NULL;
         c->anterior = NULL;
 
-        c->salto = salto; // Encontra um nome melhor pra esses dois.
+        c->salto = salto;
         c->id = id;
 
         for(int i = 0; i < 100; i++){
+                // Inicia a mascara de bits com 0 em todas as posições.
                 c->mascara[i] = 0;
         }
+
 
         return c;
 
@@ -181,11 +183,7 @@ void imprimeLista(Lista* l){
 
 	Item* atual = l->primeiro->proximo;
 	while(atual!=NULL){
-		printf("%c : ", atual->id);
-                for(int i = 0; i < 100; i++){
-                        printf("%d", atual->mascara[i]);
-                }
-                printf("\n");
+		printf("%c", atual->id);
 		atual = atual->proximo;
 	}
 	printf("\n");
@@ -196,7 +194,6 @@ void sol1(Lista* texto, Lista* padrao, FILE* out){
         Item* atualT;
         Item* atualP;
         int inicioC = -1;
-        int casou = 0;
 
         atualT = texto->primeiro->proximo;
         atualP = padrao->primeiro->proximo;
@@ -216,8 +213,7 @@ void sol1(Lista* texto, Lista* padrao, FILE* out){
                         if(atualP == NULL){
                                 //Chegou ao final do padrão
                                 fprintf(out, "S %d\n", inicioC+1);
-                                casou = 1;
-                                break;
+                                return;
                         }
 
                 } else{
@@ -239,10 +235,8 @@ void sol1(Lista* texto, Lista* padrao, FILE* out){
                         
         }
 
-       if(casou == 0){
-                //Não houve casamento.
-                fprintf(out, "N\n");
-       }
+        // Não houve casamento.
+        fprintf(out, "N\n");
     
 }
 
@@ -280,6 +274,7 @@ Lista* presol2(Lista* p){
 }
 
 void sol2(Lista* texto, Lista* padrao, FILE* out){
+        
         //Boyer Moore Horspool
         
         Lista* alfabeto = presol2(padrao);
@@ -386,6 +381,7 @@ Lista* presol3(Lista* texto, Lista* padrao){
 
         char alfabeto[] = "abcdefghijklmnopqrstuvwxyz";
 
+        // Cria a mascara de bits para todo o alfabeto.
         for(int i = 0; i < 26; i++){
                 inserir(a, criaItem(alfabeto[i], -1));
         }
@@ -404,14 +400,87 @@ Lista* presol3(Lista* texto, Lista* padrao){
 
 
 void sol3(Lista* texto, Lista* padrao, FILE* out){
+        
         // Shift and
+
         Lista* alfabeto = presol3(texto, padrao);
+        int r[padrao->tamanho];
+
+        Item* atualTexto = texto->primeiro->proximo;
+        Item* aux;
+
+        int continua = 0;
+        int passou = 0;
+        int inicioC;
+
+        for(int i = 0; i < padrao->tamanho; i++){
+                r[i] = 0;
+        }
+
+        while(atualTexto != NULL){
+                
+                if(passou > 0){
+                        // Contabiliza letras que chegaram ao fim do texto e retornaram ao inicio.
+                        passou++;
+                }
+                if(passou >= padrao->tamanho){
+                        /*
+                        Quando passou >= padrao->tamanho a busca começa a se repetir,
+                        portanto, não há casamento neste texto 
+                        */
+                        break;
+                }
+                
+                aux = buscarId(alfabeto, atualTexto->id);
+
+
+                // Shift
+                for(int j = 1; j < padrao->tamanho; j++){
+                        r[padrao->tamanho - j] = r[padrao->tamanho - j - 1];
+                }
+
+                r[0] = 1;
+
+                for(int k = 0; k < padrao->tamanho; k++){
+                        // And
+                        r[k] = r[k] && aux->mascara[k];
+                }
+
+                for(int z = 0; z < padrao->tamanho; z++){
+                        continua += r[z]; 
+                }
+
+                if(r[padrao->tamanho - 1] == 1){
+                        // Casamento
+                        inicioC = atualTexto->indice - (padrao->tamanho - passou);
+                        while(inicioC < 0){
+                                inicioC += texto->tamanho;
+                        }
+                        fprintf(out, "S %d\n", inicioC);
+                        return;
+                }
+
+                if((continua >= 1) && atualTexto->proximo == NULL){
+                        /*
+                        Chegou ao fim do texto e há um possível casamento,
+                        retorna ao inicio do texto.
+                        */
+                        atualTexto = texto->primeiro->proximo;
+                        passou = 1;
+                } else{
+                        atualTexto = atualTexto->proximo;
+                }
+        }
+        
+        // Não há casamento.
+        fprintf(out, "N\n");
 
         
 }
 
 void sol(Lista* texto, Lista* padrao, FILE* out, int solucao){
 
+        // Alterna entre possíveis soluções.
         switch(solucao){
 
                 case 1:
@@ -450,8 +519,9 @@ void casosTeste(int T, FILE* entrada, FILE* saida, int escolhida){
                 }
 
 
+                // Executa solução.
                 sol(texto, padrao, saida, escolhida);
-                printf("=====================\n");
+
                 deletaLista(padrao);
                 deletaLista(texto);
         
