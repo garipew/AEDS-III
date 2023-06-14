@@ -26,7 +26,7 @@ Item* criaOrigem(){
         
         o->id = ' ';
         o->indice = -1;
-        o->sla = -1;
+        o->salto = -1;
 
         return o;
 
@@ -34,14 +34,14 @@ Item* criaOrigem(){
 
 }
 
-Item* criaItem(char id, int a){
+Item* criaItem(char id, int salto){
 
         Item* c = (Item*) malloc(sizeof(Item));
 
         c->proximo = NULL;
         c->anterior = NULL;
 
-        c->sla = a; // Encontra um nome melhor pra esses dois.
+        c->salto = salto; // Encontra um nome melhor pra esses dois.
         c->id = id;
 
         return c;
@@ -177,7 +177,7 @@ void imprimeLista(Lista* l){
 
 	Item* atual = l->primeiro->proximo;
 	while(atual!=NULL){
-		printf("%c : %d\n", atual->id, atual->sla);
+		printf("%c : %d\n", atual->id, atual->salto);
 		atual = atual->proximo;
 	}
 	printf("\n");
@@ -260,7 +260,7 @@ Lista* presol2(Lista* p){
 
                 encontrados = buscarId(a, aux->id);
                 if(encontrados != NULL){
-                        encontrados->sla = (p->tamanho - aux->indice == 1 ? encontrados->sla : p->tamanho - aux->indice -1);
+                        encontrados->salto = (p->tamanho - aux->indice == 1 ? encontrados->salto : p->tamanho - aux->indice -1);
                 }
 
                 aux = aux->proximo;
@@ -315,7 +315,7 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
 
                         atualPadrao = atualPadrao->anterior;
                 } else{
-                        // Não há casamento.
+                        // Letras diferentes.
                         atualPadrao = padrao->ultimo;
                         
                         aux = buscarId(alfabeto, atualTexto->id);
@@ -329,7 +329,7 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
                                 atualTexto = atualTexto->proximo;
                         }
                         
-                        for(int i = 0; i < aux->sla; i++){
+                        for(int i = 0; i < aux->salto; i++){
                                 // Realiza o salto e alinha texto e padrão.
 
                                 if(p > 0){
@@ -365,6 +365,7 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
 
         }
 
+        // Não há casamento.
         fprintf(out, "N\n");
   
 }
