@@ -304,6 +304,7 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
                         if(atualPadrao == padrao->primeiro->proximo){
                                 // Casamento.
                                 fprintf(out, "S %d\n", atualTexto->indice+1);
+                                deletaLista(alfabeto);
                                 return;
                         }
 
@@ -370,6 +371,7 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
 
         // Não há casamento.
         fprintf(out, "N\n");
+        deletaLista(alfabeto);
   
 }
 
@@ -457,6 +459,7 @@ void sol3(Lista* texto, Lista* padrao, FILE* out){
                                 inicioC += texto->tamanho;
                         }
                         fprintf(out, "S %d\n", inicioC);
+                        deletaLista(alfabeto);
                         return;
                 }
 
@@ -474,6 +477,7 @@ void sol3(Lista* texto, Lista* padrao, FILE* out){
         
         // Não há casamento.
         fprintf(out, "N\n");
+        deletaLista(alfabeto);
 
         
 }
