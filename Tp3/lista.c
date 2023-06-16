@@ -351,9 +351,7 @@ void sol2(Lista* texto, Lista* padrao, FILE* out){
                                         // Ao chegar ao fim do texto, volta ao início p letras,
                                         // nunca permitindo que o padrão inteiro retorne
                                         atualTexto = texto->primeiro->proximo;
-                                        if(p == 0){
-                                                p = 1;
-                                        }
+                                        p++;
                                         continue;
 
                                 }
@@ -469,7 +467,7 @@ void sol3(Lista* texto, Lista* padrao, FILE* out){
                         retorna ao inicio do texto.
                         */
                         atualTexto = texto->primeiro->proximo;
-                        passou = 1;
+                        passou++;
                 } else{
                         atualTexto = atualTexto->proximo;
                 }
