@@ -409,7 +409,7 @@ void sol3(Lista* texto, Lista* padrao, FILE* out){
         Item* atualTexto = texto->primeiro->proximo;
         Item* aux;
 
-        int continua = 0;
+        int continua;
         int passou = 0;
         int inicioC;
 
@@ -418,6 +418,8 @@ void sol3(Lista* texto, Lista* padrao, FILE* out){
         }
 
         while(atualTexto != NULL){
+
+                continua = 0;
                 
                 if(passou > 0){
                         // Contabiliza letras que chegaram ao fim do texto e retornaram ao inicio.
@@ -434,17 +436,17 @@ void sol3(Lista* texto, Lista* padrao, FILE* out){
                 aux = buscarId(alfabeto, atualTexto->id);
 
 
-                // Shift
                 for(int j = 1; j < padrao->tamanho; j++){
+                // Shift
                         r[padrao->tamanho - j] = r[padrao->tamanho - j - 1];
+                        if(j == padrao->tamanho - 1){
+                                // Completa com 1
+                                r[0] = 1;
+                        }
+                // And
+                        r[padrao->tamanho - j] = r[padrao->tamanho -j] && aux->mascara[padrao->tamanho-j];
                 }
 
-                r[0] = 1;
-
-                for(int k = 0; k < padrao->tamanho; k++){
-                        // And
-                        r[k] = r[k] && aux->mascara[k];
-                }
 
                 for(int z = 0; z < padrao->tamanho; z++){
                         continua += r[z]; 
