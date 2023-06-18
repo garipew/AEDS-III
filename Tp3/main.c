@@ -2,8 +2,16 @@
 #include <stdlib.h>
 #include "lista.h"
 #include <string.h>
+#include <sys/time.h>
+
 
 void main(int argc, char* argv[]){
+
+/*
+    struct timeval t1, tf;
+    gettimeofday(&t1, NULL);
+*/
+
 
     FILE* entrada;
     FILE* saida;
@@ -43,5 +51,10 @@ void main(int argc, char* argv[]){
 
     fclose(entrada);
     fclose(saida);
+
+/*
+    gettimeofday(&tf, NULL);
+    printf("%.06fs\n", ((tf.tv_sec-t1.tv_sec) + 1e-6*(float)(tf.tv_usec-t1.tv_usec)));
+*/
 
 }
